@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2262ec929f8e4a67be7d480bfe81a6ce" Name="Diagram1">
+        <EntityTypeShape EntityType="DbModel.AccessType" Width="1.5" PointX="1.5" PointY="20.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.College" Width="1.5" PointX="3" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.CollegeDocument" Width="1.5" PointX="5.25" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.CollegeSpecialization" Width="1.5" PointX="8.25" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.DocumentType" Width="1.5" PointX="3" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.Dormitory" Width="1.5" PointX="3" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.DormitoryMedia" Width="1.5" PointX="5.25" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.EducationalInstitution" Width="1.5" PointX="0.75" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.EducationLevel" Width="1.5" PointX="3.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.EducationMedia" Width="1.5" PointX="3" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.FAQ" Width="1.5" PointX="3" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.Feedback" Width="1.5" PointX="6" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.FeedbackMedia" Width="1.5" PointX="8.25" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.FeedbackStatsForm" Width="1.5" PointX="8.25" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.FormOfEducating" Width="1.5" PointX="6" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.Role" Width="1.5" PointX="1.5" PointY="22.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.SpecializationInfo" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.sysdiagram" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.University" Width="1.5" PointX="3" PointY="25.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DbModel.User" Width="1.5" PointX="3.75" PointY="20.5" IsExpanded="true" />
+        <AssociationConnector Association="DbModel.FK_User_AccessType" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_College_EducationalInstitution" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_CollegeDocuments_College" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_CollegeSpecialization_College" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_CollegeDocuments_DocumentType" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_CollegeSpecialization_FormOfEducating" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_CollegeSpecialization_SpecializationInfo" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_Dormitory_EducationalInstitution" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_DormitoryMedia_Dormitory" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_EducationalInstitution_EducationMedia" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_EducationMedia_EducationalInstitution" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_FAQ_EducationalInstitution" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_Feedback_EducationalInstitution" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_University_EducationalInstitution" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_SpecializationInfo_EducationLevel" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_Feedback_User" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_FeedbackMedia_Feedback" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_FeedbackStatsForm_Feedback" ManuallyRouted="false" />
+        <AssociationConnector Association="DbModel.FK_User_Role" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DbModel.UserToken" Width="1.5" PointX="6" PointY="20.625" />
+        <AssociationConnector Association="DbModel.FK_UserToken_User" />
+        <EntityTypeShape EntityType="DbModel.EmailState" Width="1.5" PointX="6" PointY="24.125" />
+        <AssociationConnector Association="DbModel.FK_EmailState_User" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

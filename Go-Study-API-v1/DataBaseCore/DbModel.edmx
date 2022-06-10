@@ -1,0 +1,1464 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище DbModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AccessType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="College">
+          <Key>
+            <PropertyRef Name="EducationalInstitutionId" />
+          </Key>
+          <Property Name="EducationalInstitutionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CollegeDocuments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CollegeId" Type="int" />
+          <Property Name="DocumentURL" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="DocumentTypeId" Type="int" />
+        </EntityType>
+        <EntityType Name="CollegeSpecialization">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CollegeId" Type="int" />
+          <Property Name="SpecializationCode" Type="nvarchar" MaxLength="6" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="BudgetSeatsCount" Type="int" />
+          <Property Name="PaidSeatsCount" Type="int" />
+          <Property Name="PaymentAmount" Type="money" />
+          <Property Name="FormOfEducatingId" Type="int" />
+          <Property Name="IsEntranceTest" Type="bit" />
+          <Property Name="PassingScore" Type="float" />
+        </EntityType>
+        <EntityType Name="DocumentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Dormitory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InstitutionId" Type="int" Nullable="false" />
+          <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="DormitoryMedia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DormitoryId" Type="int" />
+          <Property Name="MediaURL" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="EducationalInstitution">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="SiteURL" Type="nvarchar(max)" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
+          <Property Name="MainImage" Type="int" />
+        </EntityType>
+        <EntityType Name="EducationLevel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="EducationMedia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="EducationalInstitutionId" Type="int" />
+          <Property Name="MediaURL" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="EmailState">
+          <Key>
+            <PropertyRef Name="Login" />
+          </Key>
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="VerificationCode" Type="int" Nullable="false" />
+          <Property Name="DateSentCode" Type="datetime" Nullable="false" />
+          <Property Name="IsVerificated" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FAQ">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EducationalInstitutionId" Type="int" Nullable="false" />
+          <Property Name="Question" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Answer" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EducationalInstitutionId" Type="int" />
+          <Property Name="Title" Type="nvarchar(max)" />
+          <Property Name="FeedBackText" Type="nvarchar(max)" />
+          <Property Name="Mark" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="FeedbackMedia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FeedbackId" Type="int" />
+          <Property Name="MediaURL" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="FeedbackStatsForm">
+          <Key>
+            <PropertyRef Name="FeedbackId" />
+          </Key>
+          <Property Name="FeedbackId" Type="int" Nullable="false" />
+          <Property Name="TotalMark" Type="float" />
+          <Property Name="TeachersMark" Type="float" />
+          <Property Name="TechnologiesMark" Type="float" />
+          <Property Name="ComfortMark" Type="float" />
+          <Property Name="DecorMark" Type="float" />
+        </EntityType>
+        <EntityType Name="FormOfEducating">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SpecializationInfo">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="nvarchar" MaxLength="6" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Qualification" Type="nvarchar(max)" />
+          <Property Name="DurationOfEducation" Type="int" />
+          <Property Name="MinimumEducationLevelId" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="University">
+          <Key>
+            <PropertyRef Name="EducationalInstitutionId" />
+          </Key>
+          <Property Name="EducationalInstitutionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Login" />
+          </Key>
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RoleId" Type="int" />
+          <Property Name="AccessTypeId" Type="int" />
+          <Property Name="IsEmailVerificated" Type="bit" />
+        </EntityType>
+        <EntityType Name="UserToken">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserLogin" Type="nvarchar" MaxLength="50" />
+          <Property Name="Token" Type="nvarchar(max)" />
+          <Property Name="RefreshToken" Type="nvarchar(max)" />
+          <Property Name="DeviceId" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateExpire" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_College_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="1" />
+          <End Role="College" Type="Self.College" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="College">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CollegeDocuments_College">
+          <End Role="College" Type="Self.College" Multiplicity="0..1" />
+          <End Role="CollegeDocuments" Type="Self.CollegeDocuments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="College">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Principal>
+            <Dependent Role="CollegeDocuments">
+              <PropertyRef Name="CollegeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CollegeDocuments_DocumentType">
+          <End Role="DocumentType" Type="Self.DocumentType" Multiplicity="0..1" />
+          <End Role="CollegeDocuments" Type="Self.CollegeDocuments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CollegeDocuments">
+              <PropertyRef Name="DocumentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CollegeSpecialization_College">
+          <End Role="College" Type="Self.College" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CollegeSpecialization" Type="Self.CollegeSpecialization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="College">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Principal>
+            <Dependent Role="CollegeSpecialization">
+              <PropertyRef Name="CollegeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CollegeSpecialization_FormOfEducating">
+          <End Role="FormOfEducating" Type="Self.FormOfEducating" Multiplicity="0..1" />
+          <End Role="CollegeSpecialization" Type="Self.CollegeSpecialization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FormOfEducating">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CollegeSpecialization">
+              <PropertyRef Name="FormOfEducatingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CollegeSpecialization_SpecializationInfo">
+          <End Role="SpecializationInfo" Type="Self.SpecializationInfo" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CollegeSpecialization" Type="Self.CollegeSpecialization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecializationInfo">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="CollegeSpecialization">
+              <PropertyRef Name="SpecializationCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Dormitory_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="1" />
+          <End Role="Dormitory" Type="Self.Dormitory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Dormitory">
+              <PropertyRef Name="InstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DormitoryMedia_Dormitory">
+          <End Role="Dormitory" Type="Self.Dormitory" Multiplicity="0..1" />
+          <End Role="DormitoryMedia" Type="Self.DormitoryMedia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dormitory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DormitoryMedia">
+              <PropertyRef Name="DormitoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EducationalInstitution_EducationMedia">
+          <End Role="EducationMedia" Type="Self.EducationMedia" Multiplicity="0..1" />
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationMedia">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EducationalInstitution">
+              <PropertyRef Name="MainImage" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EducationMedia_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="0..1" />
+          <End Role="EducationMedia" Type="Self.EducationMedia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EducationMedia">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmailState_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="EmailState" Type="Self.EmailState" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Login" />
+            </Principal>
+            <Dependent Role="EmailState">
+              <PropertyRef Name="Login" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FAQ_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FAQ" Type="Self.FAQ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FAQ">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feedback_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feedback">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feedback_User">
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Login" />
+            </Principal>
+            <Dependent Role="Feedback">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedbackMedia_Feedback">
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FeedbackMedia" Type="Self.FeedbackMedia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feedback">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FeedbackMedia">
+              <PropertyRef Name="FeedbackId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedbackStatsForm_Feedback">
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FeedbackStatsForm" Type="Self.FeedbackStatsForm" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Feedback">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FeedbackStatsForm">
+              <PropertyRef Name="FeedbackId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpecializationInfo_EducationLevel">
+          <End Role="EducationLevel" Type="Self.EducationLevel" Multiplicity="0..1" />
+          <End Role="SpecializationInfo" Type="Self.SpecializationInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationLevel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SpecializationInfo">
+              <PropertyRef Name="MinimumEducationLevelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_University_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="1" />
+          <End Role="University" Type="Self.University" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="University">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_AccessType">
+          <End Role="AccessType" Type="Self.AccessType" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccessType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="AccessTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserToken_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserToken" Type="Self.UserToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Login" />
+            </Principal>
+            <Dependent Role="UserToken">
+              <PropertyRef Name="UserLogin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище DbModelContainer">
+          <EntitySet Name="AccessType" EntityType="Self.AccessType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="College" EntityType="Self.College" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CollegeDocuments" EntityType="Self.CollegeDocuments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CollegeSpecialization" EntityType="Self.CollegeSpecialization" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentType" EntityType="Self.DocumentType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dormitory" EntityType="Self.Dormitory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DormitoryMedia" EntityType="Self.DormitoryMedia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EducationalInstitution" EntityType="Self.EducationalInstitution" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EducationLevel" EntityType="Self.EducationLevel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EducationMedia" EntityType="Self.EducationMedia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmailState" EntityType="Self.EmailState" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FAQ" EntityType="Self.FAQ" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FeedbackMedia" EntityType="Self.FeedbackMedia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FeedbackStatsForm" EntityType="Self.FeedbackStatsForm" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FormOfEducating" EntityType="Self.FormOfEducating" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpecializationInfo" EntityType="Self.SpecializationInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="University" EntityType="Self.University" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserToken" EntityType="Self.UserToken" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_College_EducationalInstitution" Association="Self.FK_College_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitution" />
+            <End Role="College" EntitySet="College" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CollegeDocuments_College" Association="Self.FK_CollegeDocuments_College">
+            <End Role="College" EntitySet="College" />
+            <End Role="CollegeDocuments" EntitySet="CollegeDocuments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CollegeDocuments_DocumentType" Association="Self.FK_CollegeDocuments_DocumentType">
+            <End Role="DocumentType" EntitySet="DocumentType" />
+            <End Role="CollegeDocuments" EntitySet="CollegeDocuments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CollegeSpecialization_College" Association="Self.FK_CollegeSpecialization_College">
+            <End Role="College" EntitySet="College" />
+            <End Role="CollegeSpecialization" EntitySet="CollegeSpecialization" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CollegeSpecialization_FormOfEducating" Association="Self.FK_CollegeSpecialization_FormOfEducating">
+            <End Role="FormOfEducating" EntitySet="FormOfEducating" />
+            <End Role="CollegeSpecialization" EntitySet="CollegeSpecialization" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CollegeSpecialization_SpecializationInfo" Association="Self.FK_CollegeSpecialization_SpecializationInfo">
+            <End Role="SpecializationInfo" EntitySet="SpecializationInfo" />
+            <End Role="CollegeSpecialization" EntitySet="CollegeSpecialization" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Dormitory_EducationalInstitution" Association="Self.FK_Dormitory_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitution" />
+            <End Role="Dormitory" EntitySet="Dormitory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DormitoryMedia_Dormitory" Association="Self.FK_DormitoryMedia_Dormitory">
+            <End Role="Dormitory" EntitySet="Dormitory" />
+            <End Role="DormitoryMedia" EntitySet="DormitoryMedia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EducationalInstitution_EducationMedia" Association="Self.FK_EducationalInstitution_EducationMedia">
+            <End Role="EducationMedia" EntitySet="EducationMedia" />
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitution" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EducationMedia_EducationalInstitution" Association="Self.FK_EducationMedia_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitution" />
+            <End Role="EducationMedia" EntitySet="EducationMedia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmailState_User" Association="Self.FK_EmailState_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="EmailState" EntitySet="EmailState" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FAQ_EducationalInstitution" Association="Self.FK_FAQ_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitution" />
+            <End Role="FAQ" EntitySet="FAQ" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feedback_EducationalInstitution" Association="Self.FK_Feedback_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitution" />
+            <End Role="Feedback" EntitySet="Feedback" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feedback_User" Association="Self.FK_Feedback_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Feedback" EntitySet="Feedback" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedbackMedia_Feedback" Association="Self.FK_FeedbackMedia_Feedback">
+            <End Role="Feedback" EntitySet="Feedback" />
+            <End Role="FeedbackMedia" EntitySet="FeedbackMedia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedbackStatsForm_Feedback" Association="Self.FK_FeedbackStatsForm_Feedback">
+            <End Role="Feedback" EntitySet="Feedback" />
+            <End Role="FeedbackStatsForm" EntitySet="FeedbackStatsForm" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpecializationInfo_EducationLevel" Association="Self.FK_SpecializationInfo_EducationLevel">
+            <End Role="EducationLevel" EntitySet="EducationLevel" />
+            <End Role="SpecializationInfo" EntitySet="SpecializationInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_University_EducationalInstitution" Association="Self.FK_University_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitution" />
+            <End Role="University" EntitySet="University" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_AccessType" Association="Self.FK_User_AccessType">
+            <End Role="AccessType" EntitySet="AccessType" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserToken_User" Association="Self.FK_UserToken_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserToken" EntitySet="UserToken" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AccessType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_User_AccessType" FromRole="AccessType" ToRole="User" />
+        </EntityType>
+        <EntityType Name="College">
+          <Key>
+            <PropertyRef Name="EducationalInstitutionId" />
+          </Key>
+          <Property Name="EducationalInstitutionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EducationalInstitution" Relationship="Self.FK_College_EducationalInstitution" FromRole="College" ToRole="EducationalInstitution" />
+          <NavigationProperty Name="CollegeDocuments" Relationship="Self.FK_CollegeDocuments_College" FromRole="College" ToRole="CollegeDocuments" />
+          <NavigationProperty Name="CollegeSpecializations" Relationship="Self.FK_CollegeSpecialization_College" FromRole="College" ToRole="CollegeSpecialization" />
+        </EntityType>
+        <EntityType Name="CollegeDocument">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CollegeId" Type="Int32" />
+          <Property Name="DocumentURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentTypeId" Type="Int32" />
+          <NavigationProperty Name="College" Relationship="Self.FK_CollegeDocuments_College" FromRole="CollegeDocuments" ToRole="College" />
+          <NavigationProperty Name="DocumentType" Relationship="Self.FK_CollegeDocuments_DocumentType" FromRole="CollegeDocuments" ToRole="DocumentType" />
+        </EntityType>
+        <EntityType Name="CollegeSpecialization">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CollegeId" Type="Int32" />
+          <Property Name="SpecializationCode" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BudgetSeatsCount" Type="Int32" />
+          <Property Name="PaidSeatsCount" Type="Int32" />
+          <Property Name="PaymentAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="FormOfEducatingId" Type="Int32" />
+          <Property Name="IsEntranceTest" Type="Boolean" />
+          <Property Name="PassingScore" Type="Double" />
+          <NavigationProperty Name="College" Relationship="Self.FK_CollegeSpecialization_College" FromRole="CollegeSpecialization" ToRole="College" />
+          <NavigationProperty Name="FormOfEducating" Relationship="Self.FK_CollegeSpecialization_FormOfEducating" FromRole="CollegeSpecialization" ToRole="FormOfEducating" />
+          <NavigationProperty Name="SpecializationInfo" Relationship="Self.FK_CollegeSpecialization_SpecializationInfo" FromRole="CollegeSpecialization" ToRole="SpecializationInfo" />
+        </EntityType>
+        <EntityType Name="DocumentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CollegeDocuments" Relationship="Self.FK_CollegeDocuments_DocumentType" FromRole="DocumentType" ToRole="CollegeDocuments" />
+        </EntityType>
+        <EntityType Name="Dormitory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InstitutionId" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EducationalInstitution" Relationship="Self.FK_Dormitory_EducationalInstitution" FromRole="Dormitory" ToRole="EducationalInstitution" />
+          <NavigationProperty Name="DormitoryMedias" Relationship="Self.FK_DormitoryMedia_Dormitory" FromRole="Dormitory" ToRole="DormitoryMedia" />
+        </EntityType>
+        <EntityType Name="DormitoryMedia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DormitoryId" Type="Int32" />
+          <Property Name="MediaURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Dormitory" Relationship="Self.FK_DormitoryMedia_Dormitory" FromRole="DormitoryMedia" ToRole="Dormitory" />
+        </EntityType>
+        <EntityType Name="EducationalInstitution">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SiteURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="MainImage" Type="Int32" />
+          <NavigationProperty Name="College" Relationship="Self.FK_College_EducationalInstitution" FromRole="EducationalInstitution" ToRole="College" />
+          <NavigationProperty Name="Dormitories" Relationship="Self.FK_Dormitory_EducationalInstitution" FromRole="EducationalInstitution" ToRole="Dormitory" />
+          <NavigationProperty Name="EducationMedia" Relationship="Self.FK_EducationalInstitution_EducationMedia" FromRole="EducationalInstitution" ToRole="EducationMedia" />
+          <NavigationProperty Name="EducationMedias" Relationship="Self.FK_EducationMedia_EducationalInstitution" FromRole="EducationalInstitution" ToRole="EducationMedia" />
+          <NavigationProperty Name="FAQs" Relationship="Self.FK_FAQ_EducationalInstitution" FromRole="EducationalInstitution" ToRole="FAQ" />
+          <NavigationProperty Name="Feedbacks" Relationship="Self.FK_Feedback_EducationalInstitution" FromRole="EducationalInstitution" ToRole="Feedback" />
+          <NavigationProperty Name="University" Relationship="Self.FK_University_EducationalInstitution" FromRole="EducationalInstitution" ToRole="University" />
+        </EntityType>
+        <EntityType Name="EducationLevel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SpecializationInfoes" Relationship="Self.FK_SpecializationInfo_EducationLevel" FromRole="EducationLevel" ToRole="SpecializationInfo" />
+        </EntityType>
+        <EntityType Name="EducationMedia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="EducationalInstitutionId" Type="Int32" />
+          <Property Name="MediaURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EducationalInstitutions" Relationship="Self.FK_EducationalInstitution_EducationMedia" FromRole="EducationMedia" ToRole="EducationalInstitution" />
+          <NavigationProperty Name="EducationalInstitution" Relationship="Self.FK_EducationMedia_EducationalInstitution" FromRole="EducationMedia" ToRole="EducationalInstitution" />
+        </EntityType>
+        <EntityType Name="FAQ">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EducationalInstitutionId" Type="Int32" Nullable="false" />
+          <Property Name="Question" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EducationalInstitution" Relationship="Self.FK_FAQ_EducationalInstitution" FromRole="FAQ" ToRole="EducationalInstitution" />
+        </EntityType>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EducationalInstitutionId" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FeedBackText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Mark" Type="Byte" />
+          <NavigationProperty Name="EducationalInstitution" Relationship="Self.FK_Feedback_EducationalInstitution" FromRole="Feedback" ToRole="EducationalInstitution" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Feedback_User" FromRole="Feedback" ToRole="User" />
+          <NavigationProperty Name="FeedbackMedias" Relationship="Self.FK_FeedbackMedia_Feedback" FromRole="Feedback" ToRole="FeedbackMedia" />
+          <NavigationProperty Name="FeedbackStatsForm" Relationship="Self.FK_FeedbackStatsForm_Feedback" FromRole="Feedback" ToRole="FeedbackStatsForm" />
+        </EntityType>
+        <EntityType Name="FeedbackMedia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FeedbackId" Type="Int32" />
+          <Property Name="MediaURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Feedback" Relationship="Self.FK_FeedbackMedia_Feedback" FromRole="FeedbackMedia" ToRole="Feedback" />
+        </EntityType>
+        <EntityType Name="FeedbackStatsForm">
+          <Key>
+            <PropertyRef Name="FeedbackId" />
+          </Key>
+          <Property Name="FeedbackId" Type="Int32" Nullable="false" />
+          <Property Name="TotalMark" Type="Double" />
+          <Property Name="TeachersMark" Type="Double" />
+          <Property Name="TechnologiesMark" Type="Double" />
+          <Property Name="ComfortMark" Type="Double" />
+          <Property Name="DecorMark" Type="Double" />
+          <NavigationProperty Name="Feedback" Relationship="Self.FK_FeedbackStatsForm_Feedback" FromRole="FeedbackStatsForm" ToRole="Feedback" />
+        </EntityType>
+        <EntityType Name="FormOfEducating">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CollegeSpecializations" Relationship="Self.FK_CollegeSpecialization_FormOfEducating" FromRole="FormOfEducating" ToRole="CollegeSpecialization" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_User_Role" FromRole="Role" ToRole="User" />
+        </EntityType>
+        <EntityType Name="SpecializationInfo">
+          <Key>
+            <PropertyRef Name="Code" />
+          </Key>
+          <Property Name="Code" Type="String" MaxLength="6" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Qualification" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DurationOfEducation" Type="Int32" />
+          <Property Name="MinimumEducationLevelId" Type="Int32" />
+          <NavigationProperty Name="CollegeSpecializations" Relationship="Self.FK_CollegeSpecialization_SpecializationInfo" FromRole="SpecializationInfo" ToRole="CollegeSpecialization" />
+          <NavigationProperty Name="EducationLevel" Relationship="Self.FK_SpecializationInfo_EducationLevel" FromRole="SpecializationInfo" ToRole="EducationLevel" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="University">
+          <Key>
+            <PropertyRef Name="EducationalInstitutionId" />
+          </Key>
+          <Property Name="EducationalInstitutionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EducationalInstitution" Relationship="Self.FK_University_EducationalInstitution" FromRole="University" ToRole="EducationalInstitution" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Login" />
+          </Key>
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RoleId" Type="Int32" />
+          <Property Name="AccessTypeId" Type="Int32" />
+          <NavigationProperty Name="AccessType" Relationship="Self.FK_User_AccessType" FromRole="User" ToRole="AccessType" />
+          <NavigationProperty Name="Feedbacks" Relationship="Self.FK_Feedback_User" FromRole="User" ToRole="Feedback" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_User_Role" FromRole="User" ToRole="Role" />
+          <NavigationProperty Name="UserTokens" Relationship="DbModel.FK_UserToken_User" FromRole="User" ToRole="UserToken" />
+          <NavigationProperty Name="EmailState" Relationship="DbModel.FK_EmailState_User" FromRole="User" ToRole="EmailState" />
+        </EntityType>
+        <Association Name="FK_User_AccessType">
+          <End Role="AccessType" Type="Self.AccessType" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccessType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="AccessTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_College_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="1" />
+          <End Role="College" Type="Self.College" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="College">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CollegeDocuments_College">
+          <End Role="College" Type="Self.College" Multiplicity="0..1" />
+          <End Role="CollegeDocuments" Type="Self.CollegeDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="College">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Principal>
+            <Dependent Role="CollegeDocuments">
+              <PropertyRef Name="CollegeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CollegeSpecialization_College">
+          <End Role="College" Type="Self.College" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CollegeSpecialization" Type="Self.CollegeSpecialization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="College">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Principal>
+            <Dependent Role="CollegeSpecialization">
+              <PropertyRef Name="CollegeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CollegeDocuments_DocumentType">
+          <End Role="DocumentType" Type="Self.DocumentType" Multiplicity="0..1" />
+          <End Role="CollegeDocuments" Type="Self.CollegeDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DocumentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CollegeDocuments">
+              <PropertyRef Name="DocumentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CollegeSpecialization_FormOfEducating">
+          <End Role="FormOfEducating" Type="Self.FormOfEducating" Multiplicity="0..1" />
+          <End Role="CollegeSpecialization" Type="Self.CollegeSpecialization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FormOfEducating">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CollegeSpecialization">
+              <PropertyRef Name="FormOfEducatingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CollegeSpecialization_SpecializationInfo">
+          <End Role="SpecializationInfo" Type="Self.SpecializationInfo" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CollegeSpecialization" Type="Self.CollegeSpecialization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SpecializationInfo">
+              <PropertyRef Name="Code" />
+            </Principal>
+            <Dependent Role="CollegeSpecialization">
+              <PropertyRef Name="SpecializationCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Dormitory_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="1" />
+          <End Role="Dormitory" Type="Self.Dormitory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Dormitory">
+              <PropertyRef Name="InstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DormitoryMedia_Dormitory">
+          <End Role="Dormitory" Type="Self.Dormitory" Multiplicity="0..1" />
+          <End Role="DormitoryMedia" Type="Self.DormitoryMedia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dormitory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DormitoryMedia">
+              <PropertyRef Name="DormitoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EducationalInstitution_EducationMedia">
+          <End Role="EducationMedia" Type="Self.EducationMedia" Multiplicity="0..1" />
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationMedia">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EducationalInstitution">
+              <PropertyRef Name="MainImage" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EducationMedia_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="0..1" />
+          <End Role="EducationMedia" Type="Self.EducationMedia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EducationMedia">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FAQ_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FAQ" Type="Self.FAQ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FAQ">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feedback_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Feedback">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_University_EducationalInstitution">
+          <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="1" />
+          <End Role="University" Type="Self.University" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="EducationalInstitution">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="University">
+              <PropertyRef Name="EducationalInstitutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpecializationInfo_EducationLevel">
+          <End Role="EducationLevel" Type="Self.EducationLevel" Multiplicity="0..1" />
+          <End Role="SpecializationInfo" Type="Self.SpecializationInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EducationLevel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SpecializationInfo">
+              <PropertyRef Name="MinimumEducationLevelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Feedback_User">
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Login" />
+            </Principal>
+            <Dependent Role="Feedback">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedbackMedia_Feedback">
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FeedbackMedia" Type="Self.FeedbackMedia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feedback">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FeedbackMedia">
+              <PropertyRef Name="FeedbackId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FeedbackStatsForm_Feedback">
+          <End Role="Feedback" Type="Self.Feedback" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="FeedbackStatsForm" Type="Self.FeedbackStatsForm" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Feedback">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FeedbackStatsForm">
+              <PropertyRef Name="FeedbackId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccessTypes" EntityType="Self.AccessType" />
+          <EntitySet Name="Colleges" EntityType="Self.College" />
+          <EntitySet Name="CollegeDocuments" EntityType="Self.CollegeDocument" />
+          <EntitySet Name="CollegeSpecializations" EntityType="Self.CollegeSpecialization" />
+          <EntitySet Name="DocumentTypes" EntityType="Self.DocumentType" />
+          <EntitySet Name="Dormitories" EntityType="Self.Dormitory" />
+          <EntitySet Name="DormitoryMedias" EntityType="Self.DormitoryMedia" />
+          <EntitySet Name="EducationalInstitutions" EntityType="Self.EducationalInstitution" />
+          <EntitySet Name="EducationLevels" EntityType="Self.EducationLevel" />
+          <EntitySet Name="EducationMedias" EntityType="Self.EducationMedia" />
+          <EntitySet Name="FAQs" EntityType="Self.FAQ" />
+          <EntitySet Name="Feedbacks" EntityType="Self.Feedback" />
+          <EntitySet Name="FeedbackMedias" EntityType="Self.FeedbackMedia" />
+          <EntitySet Name="FeedbackStatsForms" EntityType="Self.FeedbackStatsForm" />
+          <EntitySet Name="FormOfEducatings" EntityType="Self.FormOfEducating" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="SpecializationInfoes" EntityType="Self.SpecializationInfo" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Universities" EntityType="Self.University" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_User_AccessType" Association="Self.FK_User_AccessType">
+            <End Role="AccessType" EntitySet="AccessTypes" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_College_EducationalInstitution" Association="Self.FK_College_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitutions" />
+            <End Role="College" EntitySet="Colleges" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CollegeDocuments_College" Association="Self.FK_CollegeDocuments_College">
+            <End Role="College" EntitySet="Colleges" />
+            <End Role="CollegeDocuments" EntitySet="CollegeDocuments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CollegeSpecialization_College" Association="Self.FK_CollegeSpecialization_College">
+            <End Role="College" EntitySet="Colleges" />
+            <End Role="CollegeSpecialization" EntitySet="CollegeSpecializations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CollegeDocuments_DocumentType" Association="Self.FK_CollegeDocuments_DocumentType">
+            <End Role="DocumentType" EntitySet="DocumentTypes" />
+            <End Role="CollegeDocuments" EntitySet="CollegeDocuments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CollegeSpecialization_FormOfEducating" Association="Self.FK_CollegeSpecialization_FormOfEducating">
+            <End Role="FormOfEducating" EntitySet="FormOfEducatings" />
+            <End Role="CollegeSpecialization" EntitySet="CollegeSpecializations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CollegeSpecialization_SpecializationInfo" Association="Self.FK_CollegeSpecialization_SpecializationInfo">
+            <End Role="SpecializationInfo" EntitySet="SpecializationInfoes" />
+            <End Role="CollegeSpecialization" EntitySet="CollegeSpecializations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Dormitory_EducationalInstitution" Association="Self.FK_Dormitory_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitutions" />
+            <End Role="Dormitory" EntitySet="Dormitories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DormitoryMedia_Dormitory" Association="Self.FK_DormitoryMedia_Dormitory">
+            <End Role="Dormitory" EntitySet="Dormitories" />
+            <End Role="DormitoryMedia" EntitySet="DormitoryMedias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EducationalInstitution_EducationMedia" Association="Self.FK_EducationalInstitution_EducationMedia">
+            <End Role="EducationMedia" EntitySet="EducationMedias" />
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitutions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EducationMedia_EducationalInstitution" Association="Self.FK_EducationMedia_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitutions" />
+            <End Role="EducationMedia" EntitySet="EducationMedias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FAQ_EducationalInstitution" Association="Self.FK_FAQ_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitutions" />
+            <End Role="FAQ" EntitySet="FAQs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feedback_EducationalInstitution" Association="Self.FK_Feedback_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitutions" />
+            <End Role="Feedback" EntitySet="Feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_University_EducationalInstitution" Association="Self.FK_University_EducationalInstitution">
+            <End Role="EducationalInstitution" EntitySet="EducationalInstitutions" />
+            <End Role="University" EntitySet="Universities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpecializationInfo_EducationLevel" Association="Self.FK_SpecializationInfo_EducationLevel">
+            <End Role="EducationLevel" EntitySet="EducationLevels" />
+            <End Role="SpecializationInfo" EntitySet="SpecializationInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Feedback_User" Association="Self.FK_Feedback_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Feedback" EntitySet="Feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedbackMedia_Feedback" Association="Self.FK_FeedbackMedia_Feedback">
+            <End Role="Feedback" EntitySet="Feedbacks" />
+            <End Role="FeedbackMedia" EntitySet="FeedbackMedias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FeedbackStatsForm_Feedback" Association="Self.FK_FeedbackStatsForm_Feedback">
+            <End Role="Feedback" EntitySet="Feedbacks" />
+            <End Role="FeedbackStatsForm" EntitySet="FeedbackStatsForms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Role" Association="Self.FK_User_Role">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="UserTokens" EntityType="DbModel.UserToken" />
+          <AssociationSet Name="FK_UserToken_User" Association="DbModel.FK_UserToken_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserToken" EntitySet="UserTokens" />
+          </AssociationSet>
+          <EntitySet Name="EmailStates" EntityType="DbModel.EmailState" />
+          <AssociationSet Name="FK_EmailState_User" Association="DbModel.FK_EmailState_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="EmailState" EntitySet="EmailStates" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="UserToken">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Token" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RefreshToken" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateExpire" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="User" Relationship="DbModel.FK_UserToken_User" FromRole="UserToken" ToRole="User" />
+          <Property Name="DeviceId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_UserToken_User">
+          <End Type="DbModel.User" Role="User" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DbModel.UserToken" Role="UserToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Login" />
+            </Principal>
+            <Dependent Role="UserToken">
+              <PropertyRef Name="UserLogin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="EmailState">
+          <Key>
+            <PropertyRef Name="Login" />
+          </Key>
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VerificationCode" Type="Int32" Nullable="false" />
+          <Property Name="DateSentCode" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsVerificated" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="DbModel.FK_EmailState_User" FromRole="EmailState" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_EmailState_User">
+          <End Type="DbModel.User" Role="User" Multiplicity="1" />
+          <End Type="DbModel.EmailState" Role="EmailState" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Login" />
+            </Principal>
+            <Dependent Role="EmailState">
+              <PropertyRef Name="Login" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище DbModelContainer" CdmEntityContainer="DbEntities">
+          <EntitySetMapping Name="AccessTypes">
+            <EntityTypeMapping TypeName="DbModel.AccessType">
+              <MappingFragment StoreEntitySet="AccessType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Colleges">
+            <EntityTypeMapping TypeName="DbModel.College">
+              <MappingFragment StoreEntitySet="College">
+                <ScalarProperty Name="EducationalInstitutionId" ColumnName="EducationalInstitutionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CollegeDocuments">
+            <EntityTypeMapping TypeName="DbModel.CollegeDocument">
+              <MappingFragment StoreEntitySet="CollegeDocuments">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CollegeId" ColumnName="CollegeId" />
+                <ScalarProperty Name="DocumentURL" ColumnName="DocumentURL" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentTypeId" ColumnName="DocumentTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CollegeSpecializations">
+            <EntityTypeMapping TypeName="DbModel.CollegeSpecialization">
+              <MappingFragment StoreEntitySet="CollegeSpecialization">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CollegeId" ColumnName="CollegeId" />
+                <ScalarProperty Name="SpecializationCode" ColumnName="SpecializationCode" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="BudgetSeatsCount" ColumnName="BudgetSeatsCount" />
+                <ScalarProperty Name="PaidSeatsCount" ColumnName="PaidSeatsCount" />
+                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+                <ScalarProperty Name="FormOfEducatingId" ColumnName="FormOfEducatingId" />
+                <ScalarProperty Name="IsEntranceTest" ColumnName="IsEntranceTest" />
+                <ScalarProperty Name="PassingScore" ColumnName="PassingScore" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentTypes">
+            <EntityTypeMapping TypeName="DbModel.DocumentType">
+              <MappingFragment StoreEntitySet="DocumentType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dormitories">
+            <EntityTypeMapping TypeName="DbModel.Dormitory">
+              <MappingFragment StoreEntitySet="Dormitory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="InstitutionId" ColumnName="InstitutionId" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DormitoryMedias">
+            <EntityTypeMapping TypeName="DbModel.DormitoryMedia">
+              <MappingFragment StoreEntitySet="DormitoryMedia">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DormitoryId" ColumnName="DormitoryId" />
+                <ScalarProperty Name="MediaURL" ColumnName="MediaURL" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EducationalInstitutions">
+            <EntityTypeMapping TypeName="DbModel.EducationalInstitution">
+              <MappingFragment StoreEntitySet="EducationalInstitution">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SiteURL" ColumnName="SiteURL" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="MainImage" ColumnName="MainImage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EducationLevels">
+            <EntityTypeMapping TypeName="DbModel.EducationLevel">
+              <MappingFragment StoreEntitySet="EducationLevel">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EducationMedias">
+            <EntityTypeMapping TypeName="DbModel.EducationMedia">
+              <MappingFragment StoreEntitySet="EducationMedia">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EducationalInstitutionId" ColumnName="EducationalInstitutionId" />
+                <ScalarProperty Name="MediaURL" ColumnName="MediaURL" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FAQs">
+            <EntityTypeMapping TypeName="DbModel.FAQ">
+              <MappingFragment StoreEntitySet="FAQ">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EducationalInstitutionId" ColumnName="EducationalInstitutionId" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
+                <ScalarProperty Name="Answer" ColumnName="Answer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feedbacks">
+            <EntityTypeMapping TypeName="DbModel.Feedback">
+              <MappingFragment StoreEntitySet="Feedback">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="EducationalInstitutionId" ColumnName="EducationalInstitutionId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="FeedBackText" ColumnName="FeedBackText" />
+                <ScalarProperty Name="Mark" ColumnName="Mark" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FeedbackMedias">
+            <EntityTypeMapping TypeName="DbModel.FeedbackMedia">
+              <MappingFragment StoreEntitySet="FeedbackMedia">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FeedbackId" ColumnName="FeedbackId" />
+                <ScalarProperty Name="MediaURL" ColumnName="MediaURL" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FeedbackStatsForms">
+            <EntityTypeMapping TypeName="DbModel.FeedbackStatsForm">
+              <MappingFragment StoreEntitySet="FeedbackStatsForm">
+                <ScalarProperty Name="FeedbackId" ColumnName="FeedbackId" />
+                <ScalarProperty Name="TotalMark" ColumnName="TotalMark" />
+                <ScalarProperty Name="TeachersMark" ColumnName="TeachersMark" />
+                <ScalarProperty Name="TechnologiesMark" ColumnName="TechnologiesMark" />
+                <ScalarProperty Name="ComfortMark" ColumnName="ComfortMark" />
+                <ScalarProperty Name="DecorMark" ColumnName="DecorMark" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FormOfEducatings">
+            <EntityTypeMapping TypeName="DbModel.FormOfEducating">
+              <MappingFragment StoreEntitySet="FormOfEducating">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DbModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SpecializationInfoes">
+            <EntityTypeMapping TypeName="DbModel.SpecializationInfo">
+              <MappingFragment StoreEntitySet="SpecializationInfo">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Qualification" ColumnName="Qualification" />
+                <ScalarProperty Name="DurationOfEducation" ColumnName="DurationOfEducation" />
+                <ScalarProperty Name="MinimumEducationLevelId" ColumnName="MinimumEducationLevelId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="DbModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Universities">
+            <EntityTypeMapping TypeName="DbModel.University">
+              <MappingFragment StoreEntitySet="University">
+                <ScalarProperty Name="EducationalInstitutionId" ColumnName="EducationalInstitutionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="DbModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="AccessTypeId" ColumnName="AccessTypeId" />
+                </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserTokens">
+            <EntityTypeMapping TypeName="DbModel.UserToken">
+              <MappingFragment StoreEntitySet="UserToken">
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="DateExpire" ColumnName="DateExpire" />
+                <ScalarProperty Name="RefreshToken" ColumnName="RefreshToken" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="UserLogin" ColumnName="UserLogin" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmailStates">
+            <EntityTypeMapping TypeName="DbModel.EmailState">
+              <MappingFragment StoreEntitySet="EmailState">
+                <ScalarProperty Name="IsVerificated" ColumnName="IsVerificated" />
+                <ScalarProperty Name="DateSentCode" ColumnName="DateSentCode" />
+                <ScalarProperty Name="VerificationCode" ColumnName="VerificationCode" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
