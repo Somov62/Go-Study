@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
-namespace Go_Study_Mobile
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace Go_Study_Mobile.Views
 {
-    public partial class MainPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class Page1 : ContentPage
     {
-        public MainPage()
+        public Page1()
         {
             InitializeComponent();
         }

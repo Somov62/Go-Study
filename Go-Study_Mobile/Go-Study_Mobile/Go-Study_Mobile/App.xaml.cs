@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Go_Study_Mobile.Views;
 
 namespace Go_Study_Mobile
 {
@@ -10,11 +11,14 @@ namespace Go_Study_Mobile
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+
+
+            MainPage = new MainShellPage();
         }
 
         protected override void OnStart()
         {
+            Application.Current.MainPage.Navigation.PushModalAsync(new Page1(), true);   
         }
 
         protected override void OnSleep()

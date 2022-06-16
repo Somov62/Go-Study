@@ -4,6 +4,13 @@
              x:Class="Go_Study_Mobile.App">
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/ColorsDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{DynamicResource MainColor}"/>
+                <Setter Property="BarTextColor" Value="White"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

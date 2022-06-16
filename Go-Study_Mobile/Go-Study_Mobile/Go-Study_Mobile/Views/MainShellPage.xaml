@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Go_Study_Mobile.Views"
+    x:Class="Go_Study_Mobile.Views.MainShellPage"
+    FlyoutBackgroundColor="{DynamicResource MainColor}"
+    >
+
+    <Shell.FlyoutHeader>
+        <StackLayout Padding="10,30" BackgroundColor="{DynamicResource MainColor}">
+            <Label
+                FontSize="30"
+                HorizontalOptions="Center"
+                Text="Меню"
+                TextColor="{DynamicResource FlyoutTextColor}" />
+        </StackLayout>
+    </Shell.FlyoutHeader>
+
+
+
+    <FlyoutItem Title="page1">
+        <ShellContent Route="page1" ContentTemplate="{DataTemplate views:Page1}"/>
+    </FlyoutItem>
+    <FlyoutItem Title="page2">
+        <ShellContent Route="page2" ContentTemplate="{DataTemplate views:Page1}"/>
+    </FlyoutItem>
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid
+                x:Name="FlyoutItemLayout"
+                HeightRequest="50">
+                <Label
+                    x:Name="FlyoutItemLabel"
+                    FontSize="14"
+                    Text="{Binding Title}"
+                    VerticalTextAlignment="Center"
+                    TextColor="{DynamicResource FlyoutTextColor}"
+                    Margin="20, 0, 0, 0"
+                    />
+
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="Red" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </VisualStateManager.VisualStateGroups>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+</Shell>

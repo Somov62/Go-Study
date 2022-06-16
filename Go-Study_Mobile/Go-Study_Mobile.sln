@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32510.428
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Go-Study_Mobile.Android", "Go-Study_Mobile\Go-Study_Mobile.Android\Go-Study_Mobile.Android.csproj", "{F1C01623-10AD-4E57-943E-65E84208F277}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Go_Study_Mobile.Android", "Go-Study_Mobile\Go-Study_Mobile.Android\Go_Study_Mobile.Android.csproj", "{F1C01623-10AD-4E57-943E-65E84208F277}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Go-Study_Mobile", "Go-Study_Mobile\Go-Study_Mobile\Go-Study_Mobile.csproj", "{FB2AF6BB-DCF5-4234-B3C7-56EA82524E59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Go_Study_Mobile", "Go-Study_Mobile\Go-Study_Mobile\Go_Study_Mobile.csproj", "{FB2AF6BB-DCF5-4234-B3C7-56EA82524E59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseCore", "DataBaseCore\DataBaseCore.csproj", "{586EAD54-1677-479D-B93E-E697A6AAB24F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiService", "ApiService\ApiService.csproj", "{FDDC4EB5-52FF-4AB5-9667-3B598EE0A9DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +29,14 @@ Global
 		{FB2AF6BB-DCF5-4234-B3C7-56EA82524E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB2AF6BB-DCF5-4234-B3C7-56EA82524E59}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FB2AF6BB-DCF5-4234-B3C7-56EA82524E59}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{586EAD54-1677-479D-B93E-E697A6AAB24F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{586EAD54-1677-479D-B93E-E697A6AAB24F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{586EAD54-1677-479D-B93E-E697A6AAB24F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{586EAD54-1677-479D-B93E-E697A6AAB24F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDDC4EB5-52FF-4AB5-9667-3B598EE0A9DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDDC4EB5-52FF-4AB5-9667-3B598EE0A9DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDDC4EB5-52FF-4AB5-9667-3B598EE0A9DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDDC4EB5-52FF-4AB5-9667-3B598EE0A9DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
