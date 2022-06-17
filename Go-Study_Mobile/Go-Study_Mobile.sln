@@ -7,9 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Go_Study_Mobile.Android", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Go_Study_Mobile", "Go-Study_Mobile\Go-Study_Mobile\Go_Study_Mobile.csproj", "{FB2AF6BB-DCF5-4234-B3C7-56EA82524E59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseCore", "DataBaseCore\DataBaseCore.csproj", "{586EAD54-1677-479D-B93E-E697A6AAB24F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataBaseCore", "DataBaseCore\DataBaseCore.csproj", "{586EAD54-1677-479D-B93E-E697A6AAB24F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiService", "ApiService\ApiService.csproj", "{FDDC4EB5-52FF-4AB5-9667-3B598EE0A9DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiService", "ApiService\ApiService.csproj", "{FDDC4EB5-52FF-4AB5-9667-3B598EE0A9DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{72F3BED9-EDF3-4220-8EE3-3BE24A2350B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{FDDC4EB5-52FF-4AB5-9667-3B598EE0A9DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDDC4EB5-52FF-4AB5-9667-3B598EE0A9DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDDC4EB5-52FF-4AB5-9667-3B598EE0A9DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72F3BED9-EDF3-4220-8EE3-3BE24A2350B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72F3BED9-EDF3-4220-8EE3-3BE24A2350B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72F3BED9-EDF3-4220-8EE3-3BE24A2350B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72F3BED9-EDF3-4220-8EE3-3BE24A2350B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

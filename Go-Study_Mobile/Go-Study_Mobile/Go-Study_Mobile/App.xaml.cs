@@ -18,7 +18,7 @@ namespace Go_Study_Mobile
 
         protected override void OnStart()
         {
-            Application.Current.MainPage.Navigation.PushModalAsync(new Page1(), true);   
+            Application.Current.MainPage.Navigation.PushModalAsync(new Page1(), true);
         }
 
         protected override void OnSleep()

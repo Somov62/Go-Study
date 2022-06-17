@@ -6,18 +6,20 @@ namespace DataBaseCore
 {
     public partial class DbContext : IDisposable
     {
-        private readonly SQLiteConnection _database;
+        private readonly SQLiteAsyncConnection _database;
         public DbContext(string databasePath)
         {
-            _database = new SQLiteConnection(databasePath);
-            _database.CreateTable<UserDataModel>();
+            _database = new SQLiteAsyncConnection(databasePath);
+            _database.CreateTableAsync<UserDataModel>();
         }
+
+        public SQLiteAsyncConnection Database { get => _database; }
 
         public void Dispose()
         {
             _context = null;
-            _database.Close();
-            _database.Dispose();
+            _database.CloseAsync();
+            //_database.Dis();
             GC.SuppressFinalize(this);
         }
     }

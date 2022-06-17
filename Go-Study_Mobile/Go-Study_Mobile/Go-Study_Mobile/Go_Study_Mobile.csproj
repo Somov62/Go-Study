@@ -17,13 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\ApiService\ApiService.csproj" />
     <ProjectReference Include="..\..\DataBaseCore\DataBaseCore.csproj" />
+    <ProjectReference Include="..\..\Logger\Logger.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,12 +6,19 @@ namespace ApiService
 {
     public static class ApiTool
     {
-        private const string _adress = "http://localhost:50761/api/";
+        private const string _adress = "http://localhost:50761/v1/api/";
         public static string Get(string method)
         {
             WebClient client = new WebClient();
             client.Encoding = Encoding.UTF8;
             return client.DownloadString(_adress + method);
+        }
+
+        public static T Get<T>(string method)
+        {
+            WebClient client = new WebClient();
+            client.Encoding = Encoding.UTF8;
+            return JsonConvert.DeserializeObject<T>(client.DownloadString(_adress + method));
         }
 
         public static string Put<T>(string method, T editObject)
