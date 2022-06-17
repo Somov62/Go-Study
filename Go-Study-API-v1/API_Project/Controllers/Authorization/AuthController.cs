@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
+using API_Project.Models;
 using API_Project.Models.Authorization;
 using AuthDbLib;
 using DataBaseCore;
@@ -13,7 +14,22 @@ namespace API_Project.Controllers.Authorization
     {
         private readonly DbEntities _db = DbEntities.GetContext();
         private readonly int _timeExpired = 300;
- 
+
+        //GET:api/Auth
+        [ResponseType(typeof(AuthModel))]
+        public IHttpActionResult GetUser(string token, string deviceId)
+        {
+            if (string.IsNullOrEmpty(token)) return BadRequest("Incorrect token");
+            if (string.IsNullOrEmpty(deviceId)) return BadRequest("Incorrect deviceId, please authorize again");
+
+            var userToken = _db.UserTokens.Where(p => p.Token == token).Where(p => p.DeviceId == deviceId).FirstOrDefault();
+            if (userToken == null) return NotFound();
+            
+            if (userToken.DateExpire < DateTime.Now) return NotFound();
+
+            return Ok(new UserModel(userToken.User));
+        }
+
         // POST: api/Auth
         [ResponseType(typeof(AuthModel))]
         public IHttpActionResult PostUser(string login, string password, string deviceId)

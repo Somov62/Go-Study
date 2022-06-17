@@ -1,6 +1,8 @@
 ﻿using API_Project.Models;
+using API_Project.Models.Registration;
 using DataBaseCore;
 using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -13,7 +15,7 @@ namespace API_Project.Controllers.Registration
         #region Registration new user
         [Route("api/Reg")]
         [ResponseType(typeof(UserModel))]
-        public IHttpActionResult PostUser(UserModel user)
+        public IHttpActionResult PostUser(RegModel user)
         {
             if (string.IsNullOrEmpty(user.Login)) return BadRequest("Incorrect user data");
             if (string.IsNullOrEmpty(user.Password)) return BadRequest("Incorrect user data");
@@ -25,15 +27,15 @@ namespace API_Project.Controllers.Registration
 
             if (_db.Users.Find(user.Login) != null) return BadRequest("This email already registration");
 
-            if (_db.Roles.Find(user.RoleId) == null) return BadRequest("Incorrect user data");
-            user.AccessTypeId = 1;
+            if (_db.Roles.Where(prop => prop.Title == user.Role).FirstOrDefault() == null) return BadRequest("Incorrect user data");
+            
 
             DataBaseCore.User newUser = new DataBaseCore.User()
             {
                 UserName = user.UserName,
                 Login = user.Login,
                 Password = user.Password,
-                RoleId = user.RoleId,
+                RoleId = _db.Roles.Where(prop => prop.Title == user.Role).FirstOrDefault().Id,
                 AccessTypeId = 1
             };
 

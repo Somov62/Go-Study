@@ -1,13 +1,13 @@
 ﻿using DataBaseCore;
 using System;
 
-namespace API_Project.Models
+namespace API_Project.Models.Registration
 {
-    public class UserModel
+    public class RegModel
     {
-        public UserModel() { }
+        public RegModel() { }
 
-        public UserModel(User user)
+        public RegModel(User user)
         {
             this.Login = user.Login;
             this.UserName = user.UserName;
@@ -15,6 +15,7 @@ namespace API_Project.Models
         }
         public string Login { get; set; }
         public string UserName { get; set; }
+        public string Password { get; set; }
         public string Role { get; set; }
     }
 }
