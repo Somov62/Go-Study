@@ -4,7 +4,7 @@ using System;
 
 namespace DataBaseCore
 {
-    public partial class DbContext : IDisposable
+    public partial class DbContext //: IDisposable
     {
         private readonly SQLiteAsyncConnection _database;
         public DbContext(string databasePath)

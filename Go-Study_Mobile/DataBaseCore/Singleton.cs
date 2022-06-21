@@ -5,7 +5,7 @@ namespace DataBaseCore
 {
     public partial class DbContext
     {
-        private const string _databaseName = "friends.db";
+        private const string _databaseName = "GoStudyLocalDb.db";
         private static readonly string _connectionString = Path.Combine
             (Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), _databaseName);
 

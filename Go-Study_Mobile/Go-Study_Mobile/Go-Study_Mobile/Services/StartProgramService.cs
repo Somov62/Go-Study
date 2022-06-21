@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms;
+using Go_Study_Mobile.Views;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace Go_Study_Mobile.Services
 {
@@ -9,7 +12,8 @@ namespace Go_Study_Mobile.Services
     {
         public StartProgramService()
         {
-
+            CheckAndRequestLocationPermission();
+            _ = new Logger.LogService(DependencyService.Get<Logger.IDeviceLogService>());
         }
 
         public void Start()
@@ -18,8 +22,9 @@ namespace Go_Study_Mobile.Services
 
             if (!authService.IsAuthorized)
             {
-
+                Application.Current.MainPage = new AuthPage();
             }
         }
+        
     }
 }

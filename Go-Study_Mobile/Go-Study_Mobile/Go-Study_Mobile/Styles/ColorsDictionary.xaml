@@ -3,5 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              >
     <Color x:Key="MainColor">#317A56</Color>
+    <Color x:Key="MainBackgroundColor">#FFFFFF</Color>
     <Color x:Key="FlyoutTextColor">#FFFFFF</Color>
 </ResourceDictionary>

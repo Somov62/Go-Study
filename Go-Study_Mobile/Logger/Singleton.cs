@@ -8,10 +8,10 @@ namespace Logger
 
         public static LogService GetService()
         {
-            if (_service == null)
-            {
-                _service = new LogService();
-            }
+            //if (_service == null)
+            //{
+            //    _service = new LogService();
+            //}
             return _service;
         }
     }

@@ -19,14 +19,14 @@ namespace Go_Study_Mobile.Services
             if (_tokenData != null)
             {
                 IsAuthorized = true;
-                
+
             }
         }
 
         public bool IsAuthorized { get; private set; }
         public string Token { get; private set; }
         public UserModel User { get; private set; }
-        public UserModel UpdateUser()
+        public UserModel UpdateUserData()
         {
             if (!IsAuthorized) throw new UnauthorizedAccessException();
             UserModel user = default;
@@ -38,17 +38,22 @@ namespace Go_Study_Mobile.Services
             {
                 Logger.LogService.GetService().WriteToLog("Try get user information", false, ex);
             }
-
+            
             return user;
         }
 
         public async Task<UserToken> GetTokenFromDb()
         {
             UserToken userToken = null;
-            using (var context = DbContext.GetContext())
+
+            try
             {
+                var context = DbContext.GetContext();
                 List<UserDataModel> data = await context.Database.Table<UserDataModel>().ToListAsync();
-                var userData = data.Last();
+
+                var userData = data.LastOrDefault();
+                if (userData == null) return null;
+
                 if (userData.DateExpired < DateTime.Now)
                 {
                     await context.Database.DeleteAsync(userData);
@@ -60,6 +65,12 @@ namespace Go_Study_Mobile.Services
                     DateExpire = userData.DateExpired
                 };
             }
+            catch (Exception ex)
+            {
+                Logger.LogService logService = Logger.LogService.GetService();
+                logService.WriteToLog("Try read usertoken from local db", false, ex);
+            }
+
             return userToken;
         }
     }

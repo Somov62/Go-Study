@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Go_Study_Mobile.Views.AuthPage"
+             BackgroundColor="{DynamicResource MainBackgroundColor}">
+    <Frame 
+           BackgroundColor="{DynamicResource MainColor}"
+           CornerRadius="10" Padding="2" IsClippedToBounds="True" Margin="20, 10">
+        <Frame BackgroundColor="{DynamicResource MainBackgroundColor}"
+            
+               >
+            
+        </Frame>
+    </Frame>
+           
+</ContentPage>
