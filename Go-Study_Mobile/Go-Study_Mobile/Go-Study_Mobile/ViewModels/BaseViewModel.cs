@@ -12,7 +12,7 @@ namespace Go_Study_Mobile.ViewModels
             get => _title;
             set => Set(ref _title, value);
         }
-
+        public double FontSizeConst => 1;
         public bool Set<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if (Equals(field, value))

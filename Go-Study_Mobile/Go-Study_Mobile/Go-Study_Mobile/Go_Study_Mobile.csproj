@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,6 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Error.png" />
+    <None Remove="Images\Success.png" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
@@ -21,6 +27,12 @@
     <ProjectReference Include="..\..\DataBaseCore\DataBaseCore.csproj" />
     <ProjectReference Include="..\..\Logger\Logger.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Error.png" />
+    <Resource Include="Images\Success.png" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <EmbeddedResource Update="Styles\ColorsDictionary.xaml">
@@ -44,5 +56,9 @@
     <None Update="Views\MainShellPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 </Project>

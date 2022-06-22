@@ -4,5 +4,6 @@
              >
     <Color x:Key="MainColor">#317A56</Color>
     <Color x:Key="MainBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="MainForegroundColor">#000000</Color>
     <Color x:Key="FlyoutTextColor">#FFFFFF</Color>
 </ResourceDictionary>

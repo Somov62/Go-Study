@@ -11,8 +11,17 @@ namespace Go_Study_Mobile.Services
         {
             new Permission()
             {
-                Name = Permissions.ExternalStorageWrite,
-                IsGranted = null
+                Name = "Доступ к внутреннему хранилищу",
+                Type = Permissions.ExternalStorageWrite,
+                IsGranted = null,
+                Description = "Доступ к внутреннему хранилищу"
+            },
+            new Permission()
+            {
+                Name = "Доступ к внутреннему хранилищу",
+                Type = Permissions.ExternalStorageWrite,
+                IsGranted = null,
+                Description = "Доступ к внутреннему хранилищу"
             }
         };
 
@@ -20,22 +29,26 @@ namespace Go_Study_Mobile.Services
         {
             CheckPermissions();
         }
-        public List<Permission> PermissionsList => _permissions;
+        public bool IsAllGranted => ReturnPermissionsStatus();
+        private bool ReturnPermissionsStatus()
+        {
+            foreach (var item in GetPermissionsList())
+            {
+                if (item.IsGranted != true) return false;
+            }
+            return true;
+        }
 
         private void CheckPermissions()
         {
-            foreach (Permission item in _permissions)
-            {
-                if (item.IsGranted == true) continue;
-                switch (item.Name)
-                {
-                    case Permissions.ExternalStorageWrite:
-                        item.IsGranted = RequestExternalStorageWrite();
-                        break;
-                }
-            }
+            _permissions[0].IsGranted = CheckExternalStorageWrite();
         }
 
+        public List<Permission> GetPermissionsList()
+        {
+            CheckPermissions();
+            return _permissions;
+        }
 
         private bool CheckExternalStorageWrite()
         {
@@ -54,17 +67,14 @@ namespace Go_Study_Mobile.Services
             if (status == PermissionStatus.Disabled) return false;
             return null;
         }
-
-
-
     
 
         public class Permission
         {
-            public Permissions Name { get; set; }
+            public string Name { get; set; }
+            public Permissions Type{ get; set; }
             public bool? IsGranted { get; set; }
-
-            public string MyProperty { get; set; }
+            public string Description { get; set; }
         }
 
         public enum Permissions

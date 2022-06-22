@@ -1,16 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Go_Study_Mobile.Styles.Converters"
              x:Class="Go_Study_Mobile.App">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/ColorsDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <converters:FontSizeConverter x:Key="FontSizeConverter"/>
+
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{DynamicResource MainColor}"/>
                 <Setter Property="BarTextColor" Value="White"/>
             </Style>
+
+            <x:Double x:Key="ScreenResolution"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -18,6 +18,7 @@ namespace Go_Study_Mobile
             //MainPage = new MainShellPage();
         }
 
+        //internal StartProgramService StartingService { get;  }
         protected override void OnStart()
         {
             //Application.Current.MainPage.Navigation.PushModalAsync(new Page1(), true);

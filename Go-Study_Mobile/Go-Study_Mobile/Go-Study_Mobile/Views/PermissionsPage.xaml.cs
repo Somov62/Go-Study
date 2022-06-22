@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Go_Study_Mobile.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,10 +10,10 @@ namespace Go_Study_Mobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PermissionsPage : ContentPage
     {
-        public PermissionsPage(List<Permission> permissions)
+        internal PermissionsPage(List<Permission> permissions, Services.StartProgramService programService)
         {
             InitializeComponent();
-            BindingContext = new AppPermissionsViewModel(permissions);
+            BindingContext = new AppPermissionsViewModel(permissions, programService);
         }
     }
 }

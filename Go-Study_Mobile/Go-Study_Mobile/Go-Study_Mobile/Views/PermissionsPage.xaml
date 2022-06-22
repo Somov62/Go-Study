@@ -2,6 +2,112 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Go_Study_Mobile.Views.PermissionsPage"
+             BackgroundColor="{StaticResource MainColor}" 
              >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
 
+        <StackLayout>
+            <Label
+                    Text="Go Study!"
+                    TextColor="{DynamicResource FlyoutTextColor}"
+                    FontSize="{Binding Converter={StaticResource FontSizeConverter}, ConverterParameter=28}"
+                    FontAttributes="Bold"
+                    Margin="0, 20"
+                    HorizontalOptions="Center"/>
+            <Label
+                    Text=""
+                    TextColor="{DynamicResource MainForegroundColor}"
+                    HorizontalOptions="Center"
+                    >
+            </Label>
+        </StackLayout>
+
+
+        <StackLayout Grid.Row="1"
+                     Margin="20"
+                VerticalOptions="Center" >
+            <CollectionView
+                ItemsSource="{Binding PermissionsList}"  >
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="20"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame 
+                            Padding="20"
+                            BackgroundColor="{DynamicResource MainBackgroundColor}"
+                            CornerRadius="10">
+                            <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="5"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label 
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Name}" 
+                                        TextColor="{DynamicResource MainForegroundColor}"   
+                                        Grid.Row="0" Grid.ColumnSpan="2"/>
+
+                                    <Label 
+                                        Text="{Binding Description}" 
+                                        TextColor="{DynamicResource MainForegroundColor}"   
+                                        Grid.Row="1" Grid.ColumnSpan="2"/>
+
+                                    <StackLayout 
+                                        Orientation="Horizontal"
+                                        VerticalOptions="Center"
+                                        Grid.Row="3" Grid.Column="0">
+                                        <Image
+                                            Source="../Images/Error.png"
+                                            >
+                                            <Image.Triggers>
+                                                <DataTrigger TargetType="Image" Binding="{Binding IsGranted}" Value="true">
+                                                    <Setter Property="Source" Value="../Images/Success.png"/>
+                                                </DataTrigger>
+                                            </Image.Triggers>
+                                        </Image>
+
+                                        <Label 
+                                            Text="Статус:"
+                                            TextColor="{DynamicResource MainForegroundColor}"
+                                            />
+                                        <Label 
+                                            Text="не выдано"
+                                            TextColor="{DynamicResource MainForegroundColor}">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsGranted}" Value="true">
+                                                    <Setter Property="Text" Value="выдано"/>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+
+                                    </StackLayout>
+
+                                    <Button
+                                        Text="Выдать"
+                                        BackgroundColor="{DynamicResource MainColor}"
+                                        TextColor="{DynamicResource FlyoutTextColor}"
+                                        CornerRadius="5"
+                                        Grid.Row="3" Grid.Column="1"/>
+
+
+                                </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </Grid>
 </ContentPage>
