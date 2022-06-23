@@ -7,9 +7,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
+        <!--#region Header-->
         <StackLayout>
             <Label
                     Text="Go Study!"
@@ -19,18 +21,23 @@
                     Margin="0, 20"
                     HorizontalOptions="Center"/>
             <Label
-                    Text=""
-                    TextColor="{DynamicResource MainForegroundColor}"
+                    Text="Для корректной работы приложения, требуются некоторые разрешения:"
+                    TextColor="{DynamicResource FlyoutTextColor}"
+                    FontSize="{Binding Converter={StaticResource FontSizeConverter}, ConverterParameter=20}"
+                    Margin="20, 0"
+                    HorizontalTextAlignment="Center"
                     HorizontalOptions="Center"
                     >
             </Label>
         </StackLayout>
-
+        
+        <!--#endregion-->
 
         <StackLayout Grid.Row="1"
                      Margin="20"
                 VerticalOptions="Center" >
             <CollectionView
+                x:Name="listView"
                 ItemsSource="{Binding PermissionsList}"  >
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="20"/>
@@ -58,6 +65,7 @@
                                         HorizontalOptions="Center"
                                         Text="{Binding Name}" 
                                         TextColor="{DynamicResource MainForegroundColor}"   
+                                        FontSize="{Binding Converter={StaticResource FontSizeConverter}, ConverterParameter=18}"
                                         Grid.Row="0" Grid.ColumnSpan="2"/>
 
                                     <Label 
@@ -69,21 +77,28 @@
                                         Orientation="Horizontal"
                                         VerticalOptions="Center"
                                         Grid.Row="3" Grid.Column="0">
-                                        <Image
-                                            Source="../Images/Error.png"
+                                    <Image
+                                            Margin="-5, -5, -5, -5"
+                                            Aspect="AspectFit"
+                                            Source="Error.png"
+                                            HeightRequest="50"
+                                            WidthRequest ="50"
                                             >
-                                            <Image.Triggers>
+                                        <Image.Triggers>
                                                 <DataTrigger TargetType="Image" Binding="{Binding IsGranted}" Value="true">
-                                                    <Setter Property="Source" Value="../Images/Success.png"/>
+                                                    <Setter Property="Source" Value="Success.png"/>
                                                 </DataTrigger>
                                             </Image.Triggers>
                                         </Image>
 
+                                    <StackLayout Padding="0" Spacing="4">
+                                        
                                         <Label 
                                             Text="Статус:"
                                             TextColor="{DynamicResource MainForegroundColor}"
                                             />
                                         <Label 
+                                            x:Name="bindLabel"
                                             Text="не выдано"
                                             TextColor="{DynamicResource MainForegroundColor}">
                                             <Label.Triggers>
@@ -92,15 +107,29 @@
                                                 </DataTrigger>
                                             </Label.Triggers>
                                         </Label>
+                                    </StackLayout>
 
                                     </StackLayout>
 
-                                    <Button
+                                <Button
                                         Text="Выдать"
+                                        Command="{Binding Source={x:Reference listView}, Path=BindingContext.RequestPermissionCommand}"
+                                        CommandParameter="{Binding Name}"
                                         BackgroundColor="{DynamicResource MainColor}"
                                         TextColor="{DynamicResource FlyoutTextColor}"
                                         CornerRadius="5"
-                                        Grid.Row="3" Grid.Column="1"/>
+                                        Padding="0"
+                                        HeightRequest="20"
+                                        WidthRequest="50"
+                                        FontSize="{Binding Converter={StaticResource FontSizeConverter}, ConverterParameter=14}"
+                                        TextTransform="None"
+                                        Grid.Row="3" Grid.Column="1">
+                                    <Button.Triggers>
+                                        <DataTrigger TargetType="Button" Binding="{Binding IsGranted}" Value="true">
+                                            <Setter Property="IsVisible" Value="false" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
 
 
                                 </Grid>
@@ -109,5 +138,25 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </StackLayout>
+
+        <Frame
+            CornerRadius="10"
+            BackgroundColor="{DynamicResource MainBackgroundColor}"
+            Grid.Row="2"
+            Margin="20"
+            Padding="0"
+            >
+            <Button 
+                Text="Закрыть приложение"
+                CornerRadius="10"
+                FontSize="{Binding Converter={StaticResource FontSizeConverter}, ConverterParameter=16}"
+                TextTransform="None"
+                Command="{Binding CloseAppCommand}"
+                BackgroundColor="{DynamicResource MainColor}"
+                TextColor="{DynamicResource FlyoutTextColor}"
+                Margin="20, 15">
+                
+            </Button>
+        </Frame>
     </Grid>
 </ContentPage>

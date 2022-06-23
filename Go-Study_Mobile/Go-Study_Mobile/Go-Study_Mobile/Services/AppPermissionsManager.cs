@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 
 namespace Go_Study_Mobile.Services
@@ -11,14 +12,14 @@ namespace Go_Study_Mobile.Services
         {
             new Permission()
             {
-                Name = "Доступ к внутреннему хранилищу",
+                Name = "Внутреннее хранилище",
                 Type = Permissions.ExternalStorageWrite,
                 IsGranted = null,
-                Description = "Доступ к внутреннему хранилищу"
+                Description = "Доступ к внутреннему хранилищу, для сохранения данных приложения"
             },
             new Permission()
             {
-                Name = "Доступ к внутреннему хранилищу",
+                Name = "Камера",
                 Type = Permissions.ExternalStorageWrite,
                 IsGranted = null,
                 Description = "Доступ к внутреннему хранилищу"
@@ -29,7 +30,31 @@ namespace Go_Study_Mobile.Services
         {
             CheckPermissions();
         }
+
         public bool IsAllGranted => ReturnPermissionsStatus();
+        
+        internal Permission RequestPermission(Permission permission)
+        {
+            switch (permission.Type)
+            {
+                case Permissions.ExternalStorageWrite:
+                    permission.IsGranted = RequestExternalStorageWrite().Result;
+                    return permission;
+                default:
+                    return permission;
+            }
+        }
+        
+
+        public List<Permission> GetPermissionsList()
+        {
+            CheckPermissions();
+            return _permissions;
+        }
+        private void CheckPermissions()
+        {
+            _permissions[0].IsGranted = CheckExternalStorageWrite();
+        }
         private bool ReturnPermissionsStatus()
         {
             foreach (var item in GetPermissionsList())
@@ -38,18 +63,6 @@ namespace Go_Study_Mobile.Services
             }
             return true;
         }
-
-        private void CheckPermissions()
-        {
-            _permissions[0].IsGranted = CheckExternalStorageWrite();
-        }
-
-        public List<Permission> GetPermissionsList()
-        {
-            CheckPermissions();
-            return _permissions;
-        }
-
         private bool CheckExternalStorageWrite()
         {
             var status = Xamarin.Essentials.Permissions.CheckStatusAsync<Xamarin.Essentials.Permissions.StorageWrite>().Result;
@@ -59,9 +72,9 @@ namespace Go_Study_Mobile.Services
             return false;
         }
 
-        private bool? RequestExternalStorageWrite()
+        private async Task<bool?> RequestExternalStorageWrite()
         {
-            var status = Xamarin.Essentials.Permissions.RequestAsync<Xamarin.Essentials.Permissions.StorageWrite>().Result;
+            var status = await Xamarin.Essentials.Permissions.RequestAsync<Xamarin.Essentials.Permissions.StorageWrite>();
 
             if (status == PermissionStatus.Granted) return true;
             if (status == PermissionStatus.Disabled) return false;

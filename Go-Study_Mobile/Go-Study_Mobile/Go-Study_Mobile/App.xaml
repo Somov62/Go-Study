@@ -17,6 +17,7 @@
             </Style>
 
             <x:Double x:Key="ScreenResolution"/>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>
