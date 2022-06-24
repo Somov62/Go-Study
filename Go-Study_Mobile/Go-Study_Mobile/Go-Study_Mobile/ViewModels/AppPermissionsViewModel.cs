@@ -6,6 +6,8 @@ using static Go_Study_Mobile.Services.AppPermissionsManager;
 using System.Linq;
 using System.Windows.Input;
 using Go_Study_Mobile.Interfaces;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace Go_Study_Mobile.ViewModels
 {
@@ -23,19 +25,21 @@ namespace Go_Study_Mobile.ViewModels
         public List<Permission> PermissionsList
         {
             get => _permissions;
-            set => Set(ref _permissions, value);
+            set => Set(ref _permissions, value, nameof(PermissionsList));
         }
 
         public ICommand RequestPermissionCommand { get; }
         public ICommand CloseAppCommand { get; }
 
-        private void RequestPermission(string permissionName)
+        private async void RequestPermission(string permissionName)
         {
             Permission permission = _permissions.FirstOrDefault(p => p.Name == permissionName);
             int listIndex = _permissions.IndexOf(permission);
 
             AppPermissionsManager manager = new AppPermissionsManager();
-            PermissionsList[listIndex] = manager.RequestPermission(permission);
+            var list = new List<Permission>(PermissionsList);
+            list[listIndex] = await manager.RequestPermission(permission);
+            PermissionsList = list;
         }
 
         private void CloseApplication()

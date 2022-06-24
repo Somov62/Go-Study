@@ -33,12 +33,12 @@ namespace Go_Study_Mobile.Services
 
         public bool IsAllGranted => ReturnPermissionsStatus();
         
-        internal Permission RequestPermission(Permission permission)
+        internal async Task<Permission> RequestPermission(Permission permission)
         {
             switch (permission.Type)
             {
                 case Permissions.ExternalStorageWrite:
-                    //permission.IsGranted = await RequestExternalStorageWrite1();
+                    permission.IsGranted = await RequestExternalStorageWrite();
                     return permission;
                 default:
                     return permission;
@@ -72,11 +72,6 @@ namespace Go_Study_Mobile.Services
             return false;
         }
 
-        private async Task<bool?> RequestExternalStorageWrite1()
-        {
-            var status = await RequestExternalStorageWrite();
-            return status;
-        }
         private async Task<bool?> RequestExternalStorageWrite()
         {
             var status = await Xamarin.Essentials.Permissions.RequestAsync<Xamarin.Essentials.Permissions.StorageWrite>();
