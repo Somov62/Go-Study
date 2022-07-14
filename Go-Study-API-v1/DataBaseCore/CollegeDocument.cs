@@ -15,10 +15,10 @@ namespace DataBaseCore
     public partial class CollegeDocument
     {
         public int Id { get; set; }
-        public Nullable<int> CollegeId { get; set; }
+        public int CollegeId { get; set; }
         public string DocumentURL { get; set; }
         public string Description { get; set; }
-        public Nullable<int> DocumentTypeId { get; set; }
+        public int DocumentTypeId { get; set; }
     
         public virtual College College { get; set; }
         public virtual DocumentType DocumentType { get; set; }

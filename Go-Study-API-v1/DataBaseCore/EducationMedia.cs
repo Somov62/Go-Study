@@ -14,19 +14,11 @@ namespace DataBaseCore
     
     public partial class EducationMedia
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public EducationMedia()
-        {
-            this.EducationalInstitutions = new HashSet<EducationalInstitution>();
-        }
-    
         public int Id { get; set; }
-        public Nullable<int> EducationalInstitutionId { get; set; }
-        public string MediaURL { get; set; }
-        public string Description { get; set; }
+        public int EducationalInstitutionId { get; set; }
+        public int MediaId { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EducationalInstitution> EducationalInstitutions { get; set; }
         public virtual EducationalInstitution EducationalInstitution { get; set; }
+        public virtual MediaFile MediaFile { get; set; }
     }
 }

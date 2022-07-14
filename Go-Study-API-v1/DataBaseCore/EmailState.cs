@@ -14,7 +14,7 @@ namespace DataBaseCore
     
     public partial class EmailState
     {
-        public string Login { get; set; }
+        public string UserLogin { get; set; }
         public int VerificationCode { get; set; }
         public System.DateTime DateSentCode { get; set; }
         public bool IsVerificated { get; set; }

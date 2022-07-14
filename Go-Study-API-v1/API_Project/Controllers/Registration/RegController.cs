@@ -43,7 +43,7 @@ namespace API_Project.Controllers.Registration
 
             DataBaseCore.EmailState emailState = new DataBaseCore.EmailState()
             {
-                Login = user.Login,
+                UserLogin = user.Login,
                 VerificationCode = rnd.Next(23981, 100000),
                 DateSentCode = DateTime.Now,
                 IsVerificated = false

@@ -1,4 +1,4 @@
-﻿// Создание кода T4 для модели "C:\Users\olimp\source\repos\Somov62\Go-StudyUpdate\Go-Study-API-v1\DataBaseCore\DbModel.edmx" включено. 
+﻿// Создание кода T4 для модели "C:\Users\somik\source\repos\GoStudyApi\Go-Study\Go-Study-API-v1\DataBaseCore\DbModel.edmx" включено. 
 // Чтобы включить формирование кода прежних версий, измените значение свойства "Стратегия создания кода" конструктора
 // на "Legacy ObjectContext". Это свойство доступно в окне "Свойства", если модель
 // открыта в конструкторе.

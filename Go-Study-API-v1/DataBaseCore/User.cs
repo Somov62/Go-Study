@@ -28,11 +28,11 @@ namespace DataBaseCore
         public Nullable<int> AccessTypeId { get; set; }
     
         public virtual AccessType AccessType { get; set; }
+        public virtual EmailState EmailState { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Feedback> Feedbacks { get; set; }
         public virtual Role Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserToken> UserTokens { get; set; }
-        public virtual EmailState EmailState { get; set; }
     }
 }

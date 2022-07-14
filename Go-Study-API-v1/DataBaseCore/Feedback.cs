@@ -21,11 +21,11 @@ namespace DataBaseCore
         }
     
         public int Id { get; set; }
-        public string UserId { get; set; }
-        public Nullable<int> EducationalInstitutionId { get; set; }
+        public string UserLogin { get; set; }
+        public int EducationalInstitutionId { get; set; }
         public string Title { get; set; }
-        public string FeedBackText { get; set; }
-        public Nullable<byte> Mark { get; set; }
+        public string FeedbackText { get; set; }
+        public int CountLikes { get; set; }
     
         public virtual EducationalInstitution EducationalInstitution { get; set; }
         public virtual User User { get; set; }

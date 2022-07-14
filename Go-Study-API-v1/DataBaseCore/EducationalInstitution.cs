@@ -28,14 +28,13 @@ namespace DataBaseCore
         public string SiteURL { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
-        public Nullable<double> Latitude { get; set; }
-        public Nullable<double> Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public Nullable<int> MainImage { get; set; }
     
         public virtual College College { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Dormitory> Dormitories { get; set; }
-        public virtual EducationMedia EducationMedia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EducationMedia> EducationMedias { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

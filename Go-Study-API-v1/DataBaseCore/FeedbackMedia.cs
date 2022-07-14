@@ -15,10 +15,10 @@ namespace DataBaseCore
     public partial class FeedbackMedia
     {
         public int Id { get; set; }
-        public Nullable<int> FeedbackId { get; set; }
-        public string MediaURL { get; set; }
-        public string Description { get; set; }
+        public int FeedbackId { get; set; }
+        public int MediaId { get; set; }
     
         public virtual Feedback Feedback { get; set; }
+        public virtual MediaFile MediaFile { get; set; }
     }
 }

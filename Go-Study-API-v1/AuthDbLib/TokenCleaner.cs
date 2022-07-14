@@ -29,7 +29,7 @@ namespace AuthDbLib
         public void ClearUserToken(UserToken user)
         {
             var db = DbEntities.GetContext();
-            user.DateExpire = null;
+            user.DateExpire = default;
             user.Token = string.Empty;
             user.RefreshToken = string.Empty;
             db.SaveChanges();

@@ -67,7 +67,7 @@ namespace API_Project.Controllers.Authorization
             {
                 //Logger
             }
-            return Ok(new AuthModel(deviceTokenInfo.Token, deviceTokenInfo.RefreshToken, deviceTokenInfo.DateExpire.Value));
+            return Ok(new AuthModel(deviceTokenInfo.Token, deviceTokenInfo.RefreshToken, deviceTokenInfo.DateExpire));
         }
 
         [Route("api/Auth/Refresh")]
@@ -93,7 +93,7 @@ namespace API_Project.Controllers.Authorization
                 //Logger
                 return BadRequest("Something went wrong");
             }
-            return Ok(new AuthModel(deviceTokenInfo.Token, deviceTokenInfo.RefreshToken, deviceTokenInfo.DateExpire.Value));
+            return Ok(new AuthModel(deviceTokenInfo.Token, deviceTokenInfo.RefreshToken, deviceTokenInfo.DateExpire));
         }
 
         [Route("api/Auth/LogOut")]

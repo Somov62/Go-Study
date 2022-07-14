@@ -15,18 +15,18 @@ namespace DataBaseCore
     public partial class CollegeSpecialization
     {
         public int Id { get; set; }
-        public Nullable<int> CollegeId { get; set; }
+        public int CollegeId { get; set; }
         public string SpecializationCode { get; set; }
         public string Description { get; set; }
         public Nullable<int> BudgetSeatsCount { get; set; }
         public Nullable<int> PaidSeatsCount { get; set; }
         public Nullable<decimal> PaymentAmount { get; set; }
-        public Nullable<int> FormOfEducatingId { get; set; }
-        public Nullable<bool> IsEntranceTest { get; set; }
+        public int FormOfEducatingId { get; set; }
+        public bool IsEntranceTest { get; set; }
         public Nullable<double> PassingScore { get; set; }
     
         public virtual College College { get; set; }
-        public virtual FormOfEducating FormOfEducating { get; set; }
+        public virtual FormOfEducation FormOfEducation { get; set; }
         public virtual SpecializationInfo SpecializationInfo { get; set; }
     }
 }

@@ -12,18 +12,25 @@ namespace DataBaseCore
     using System;
     using System.Collections.Generic;
     
-    public partial class FormOfEducating
+    public partial class MediaFile
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public FormOfEducating()
+        public MediaFile()
         {
-            this.CollegeSpecializations = new HashSet<CollegeSpecialization>();
+            this.DormitoryMedias = new HashSet<DormitoryMedia>();
+            this.EducationMedias = new HashSet<EducationMedia>();
+            this.FeedbackMedias = new HashSet<FeedbackMedia>();
         }
     
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string MediaURL { get; set; }
+        public string Description { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CollegeSpecialization> CollegeSpecializations { get; set; }
+        public virtual ICollection<DormitoryMedia> DormitoryMedias { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EducationMedia> EducationMedias { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FeedbackMedia> FeedbackMedias { get; set; }
     }
 }

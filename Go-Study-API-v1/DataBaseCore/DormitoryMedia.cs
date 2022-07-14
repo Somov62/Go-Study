@@ -15,10 +15,10 @@ namespace DataBaseCore
     public partial class DormitoryMedia
     {
         public int Id { get; set; }
-        public Nullable<int> DormitoryId { get; set; }
-        public string MediaURL { get; set; }
-        public string Description { get; set; }
+        public int DormitoryId { get; set; }
+        public int MediaId { get; set; }
     
         public virtual Dormitory Dormitory { get; set; }
+        public virtual MediaFile MediaFile { get; set; }
     }
 }

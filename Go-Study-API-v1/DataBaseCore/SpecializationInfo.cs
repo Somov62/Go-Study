@@ -23,8 +23,8 @@ namespace DataBaseCore
         public string Code { get; set; }
         public string Name { get; set; }
         public string Qualification { get; set; }
-        public Nullable<int> DurationOfEducation { get; set; }
-        public Nullable<int> MinimumEducationLevelId { get; set; }
+        public int DurationOfEducation { get; set; }
+        public int MinimumEducationLevelId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CollegeSpecialization> CollegeSpecializations { get; set; }

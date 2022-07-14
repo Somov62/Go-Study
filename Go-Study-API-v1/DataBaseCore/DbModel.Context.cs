@@ -35,17 +35,18 @@ namespace DataBaseCore
         public virtual DbSet<EducationalInstitution> EducationalInstitutions { get; set; }
         public virtual DbSet<EducationLevel> EducationLevels { get; set; }
         public virtual DbSet<EducationMedia> EducationMedias { get; set; }
+        public virtual DbSet<EmailState> EmailStates { get; set; }
         public virtual DbSet<FAQ> FAQs { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
         public virtual DbSet<FeedbackMedia> FeedbackMedias { get; set; }
         public virtual DbSet<FeedbackStatsForm> FeedbackStatsForms { get; set; }
-        public virtual DbSet<FormOfEducating> FormOfEducatings { get; set; }
+        public virtual DbSet<FormOfEducation> FormOfEducations { get; set; }
+        public virtual DbSet<MediaFile> MediaFiles { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SpecializationInfo> SpecializationInfoes { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<University> Universities { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserToken> UserTokens { get; set; }
-        public virtual DbSet<EmailState> EmailStates { get; set; }
     }
 }
