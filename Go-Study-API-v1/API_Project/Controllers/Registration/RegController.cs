@@ -5,18 +5,27 @@ using System;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Newtonsoft.Json;
 
 namespace API_Project.Controllers.Registration
 {
+    [RoutePrefix("reg")]
     public class RegController : ApiController
     {
         private readonly DbEntities _db = DbEntities.GetContext();
 
         #region Registration new user
-        [Route("api/Reg")]
+        /// <summary>
+        /// Method for registration new account
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>If success, return user information</returns>
+        [HttpPost]
+        [Route("")]
         [ResponseType(typeof(UserModel))]
-        public IHttpActionResult PostUser(RegModel user)
+        public IHttpActionResult PostUser([FromBody] RegModel user)
         {
+            #region Validating
             if (string.IsNullOrEmpty(user.Login)) return BadRequest("Incorrect user data");
             if (string.IsNullOrEmpty(user.Password)) return BadRequest("Incorrect user data");
             if (string.IsNullOrEmpty(user.UserName)) return BadRequest("Incorrect user data");
@@ -28,7 +37,7 @@ namespace API_Project.Controllers.Registration
             if (_db.Users.Find(user.Login) != null) return BadRequest("This email already registration");
 
             if (_db.Roles.Where(prop => prop.Title == user.Role).FirstOrDefault() == null) return BadRequest("Incorrect user data");
-            
+            #endregion
 
             DataBaseCore.User newUser = new DataBaseCore.User()
             {
@@ -49,7 +58,6 @@ namespace API_Project.Controllers.Registration
                 IsVerificated = false
             };
 
-
             try
             {
                 _db.Users.Add(newUser);
@@ -65,29 +73,38 @@ namespace API_Project.Controllers.Registration
             return Ok(new UserModel(newUser));
         }
 
-        [Route("api/Reg/CheckVerificationCode")]
+        /// <summary>
+        /// Use to confirm email after registration
+        /// </summary>
+        /// <param name="verficationData">Account email and verification code from email message</param>
+        /// <returns>If success, return user information</returns>
+        [HttpPost]
+        [Route("confirmEmail")]
         [ResponseType(typeof(UserModel))]
-        public IHttpActionResult PostCheckVerificationCode(UserModel userModel, int code)
+        public IHttpActionResult PostCheckVerificationCode([FromBody] EmailVerficationModel verficationData)
         {
-            if (string.IsNullOrEmpty(userModel.Login)) return BadRequest("Incorrect email");
-            if (code < 23981 || code > 100000) return BadRequest("Incorrect verification code");
+            #region Validating
+            if (string.IsNullOrEmpty(verficationData.Email)) return BadRequest("Incorrect email");
+            if (verficationData.Code < 23981 || verficationData.Code > 100000) return BadRequest("Incorrect verification code");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = _db.Users.Find(userModel.Login);
+            var user = _db.Users.Find(verficationData.Email);
             if (user == null) return NotFound();
+            #endregion
+
             if (user.EmailState.IsVerificated) return BadRequest("Email already verificated");
 
             if (user.EmailState.DateSentCode.AddSeconds(600) < DateTime.Now) return BadRequest("Verificated code expired");
-            if (user.EmailState.VerificationCode != code) return BadRequest("Incorrect verification code");
+            if (user.EmailState.VerificationCode != verficationData.Code) return BadRequest("Incorrect verification code");
 
             user.EmailState.IsVerificated = true;
-            //user.EmailState.VerificationCode = -1;
-
+            user.EmailState.VerificationCode = -1;
 
             try
             {
                 _db.SaveChanges();
-                if (SendVerificationSuccess(user)) return BadRequest("The limit of sent messages has been exceeded");
+                bool isSendSuccess = SendVerificationSuccess(user);
+                if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
             catch
             {
@@ -96,29 +113,36 @@ namespace API_Project.Controllers.Registration
             }
             return Ok(new UserModel(user));
         }
-
         #endregion
 
         #region Reset password
-        [Route("api/Reg/ResetPassword")]
+        /// <summary>
+        /// Allows you to reset the password, sends the code to the account email
+        /// </summary>
+        /// <param name="login">Account email</param>
+        /// <returns>Returns http action result code</returns>
+        [HttpPost]
+        [Route("resetPassword")]
         [ResponseType(typeof(UserModel))]
-        public IHttpActionResult PostResetPassword(string login)
+        public IHttpActionResult PostResetPassword([FromBody] string login)
         {
+            #region Validating
             if (string.IsNullOrEmpty(login)) return BadRequest("Incorrect email");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var user = _db.Users.Find(login);
             if (user == null) return NotFound();
+            #endregion
 
             Random rnd = new Random();
             user.EmailState.VerificationCode = rnd.Next(23981, 100000);
             user.EmailState.DateSentCode = DateTime.Now;
 
-
             try
             {
                 _db.SaveChanges();
-                if (!SendResetPasswordCode(user, user.EmailState.VerificationCode)) return BadRequest("The limit of sent messages has been exceeded");
+                bool isSendSuccess = SendResetPasswordCode(user, user.EmailState.VerificationCode);
+                if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
             catch
             {
@@ -128,32 +152,41 @@ namespace API_Project.Controllers.Registration
             return Ok();
         }
 
-        [Route("api/Reg/CheckResetPasswordCode")]
+        /// <summary>
+        /// Use to finish reset password
+        /// </summary>
+        /// <param name="resetPasswordData">Model email, new password, verification code</param>
+        /// <returns>If success, return user information</returns>
+        [HttpPost]
+        [Route("confirmResetPassword")]
         [ResponseType(typeof(UserModel))]
-        public IHttpActionResult PostCheckResetPasswordCode(string login, string newPassword, int code)
+        public IHttpActionResult PostCheckResetPasswordCode([FromBody] ResetPasswordModel resetPasswordData)
         {
-            if (string.IsNullOrEmpty(login)) return BadRequest("Incorrect email");
-            if (string.IsNullOrEmpty(newPassword)) return BadRequest("Incorrect password");
-
+            #region Validating
+            if (string.IsNullOrEmpty(resetPasswordData.Login)) return BadRequest("Incorrect email");
+            if (string.IsNullOrEmpty(resetPasswordData.Password)) return BadRequest("Incorrect password");
+            
             DataValidator.DataValidator validator = new DataValidator.DataValidator();
-            if (!validator.ValidateMD5(newPassword)) return BadRequest("Incorrect password");
+            if (!validator.ValidateMD5(resetPasswordData.Password)) return BadRequest("Incorrect password");
 
-            if (code < 23981 || code > 100000) return BadRequest("Incorrect verification code");
+            if (resetPasswordData.Code < 23981 || resetPasswordData.Code > 100000) return BadRequest("Incorrect verification code");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = _db.Users.Find(login);
+            var user = _db.Users.Find(resetPasswordData.Login);
             if (user == null) return NotFound();
+            #endregion
 
             if (user.EmailState.DateSentCode.AddSeconds(600) < DateTime.Now) return BadRequest("Verificated code expired");
-            if (user.EmailState.VerificationCode != code) return BadRequest("Incorrect verification code");
+            if (user.EmailState.VerificationCode != resetPasswordData.Code) return BadRequest("Incorrect verification code");
 
-            //user.EmailState.VerificationCode = -1;
+            user.EmailState.VerificationCode = -1;
 
-            user.Password = newPassword;
+            user.Password = resetPasswordData.Password;
             try
             {
                 _db.SaveChanges();
-                if (!SendResetPasswordSuccess(user)) return BadRequest("The limit of sent messages has been exceeded");
+                bool isSendSuccess = SendResetPasswordSuccess(user);
+                if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
             catch
             {
@@ -162,10 +195,9 @@ namespace API_Project.Controllers.Registration
             }
             return Ok(new UserModel(user));
         }
-
         #endregion
 
-        private bool SendVerificationCode(User user, int code)
+        private bool SendVerificationCode(DataBaseCore.User user, int code)
         {
             EmailSender.EmailSender sender = new EmailSender.EmailSender();
             string subject = "Go Study - завершение регистрации";
@@ -173,7 +205,7 @@ namespace API_Project.Controllers.Registration
             return sender.SimpleSend(user.Login, subject, messege, user.UserName);
         }
 
-        private bool SendVerificationSuccess(User user)
+        private bool SendVerificationSuccess(DataBaseCore.User user)
         {
             EmailSender.EmailSender sender = new EmailSender.EmailSender();
             string subject = "Добро пожаловать в Go Study!";
@@ -181,7 +213,7 @@ namespace API_Project.Controllers.Registration
             return sender.SimpleSend(user.Login, subject, messege, user.UserName);
         }
 
-        private bool SendResetPasswordCode(User user, int code)
+        private bool SendResetPasswordCode(DataBaseCore.User user, int code)
         {
             EmailSender.EmailSender sender = new EmailSender.EmailSender();
             string subject = "Go Study - восстановление пароля";
@@ -189,7 +221,7 @@ namespace API_Project.Controllers.Registration
             return sender.SimpleSend(user.Login, subject, messege, user.UserName);
         }
 
-        private bool SendResetPasswordSuccess(User user)
+        private bool SendResetPasswordSuccess(DataBaseCore.User user)
         {
             EmailSender.EmailSender sender = new EmailSender.EmailSender();
             string subject = "Go Study - пароль изменён";

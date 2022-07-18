@@ -3,110 +3,99 @@ using System.Data;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
-using API_Project.Models;
 using API_Project.Models.Authorization;
 using AuthDbLib;
 using DataBaseCore;
 
 namespace API_Project.Controllers.Authorization
 {
+    [RoutePrefix("auth")]
     public class AuthController : ApiController
     {
         private readonly DbEntities _db = DbEntities.GetContext();
         private readonly int _timeExpired = 300;
 
-        //GET:api/Auth
-        [ResponseType(typeof(AuthModel))]
-        public IHttpActionResult GetUser(string token)
+        /// <summary>
+        /// Authorization user in system. Getting a token.
+        /// </summary>
+        /// <param name="credentials">Login and encrypted password</param>
+        /// <returns>Returns token data for further connection to the server</returns>
+        [HttpPost]
+        [Route("")]
+        [ResponseType(typeof(TokenModel))]
+        public IHttpActionResult PostUser([FromBody] CredentialModel credentials)
         {
-            if (string.IsNullOrEmpty(token)) return BadRequest("Incorrect token");
-
-            var userToken = _db.UserTokens.Where(p => p.Token == token).FirstOrDefault();
-            if (userToken == null) return NotFound();
-            
-            if (userToken.DateExpire < DateTime.Now) return NotFound();
-
-            return Ok(new UserModel(userToken.User));
-        }
-
-        // POST: api/Auth
-        [ResponseType(typeof(AuthModel))]
-        public IHttpActionResult PostUser(string login, string password)
-        {
-            if (string.IsNullOrEmpty(login)) return BadRequest("Incorrect user data");
-            if (string.IsNullOrEmpty(password)) return BadRequest("Incorrect user data");
+            #region Validating
+            if (string.IsNullOrEmpty(credentials.Login)) return BadRequest("Incorrect user data");
+            if (string.IsNullOrEmpty(credentials.Password)) return BadRequest("Incorrect user data");
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var user = _db.Users.Find(login);
+            var user = _db.Users.Find(credentials.Login);
             if (user == null) return NotFound();
             if (!user.EmailState.IsVerificated) return BadRequest("Email is not verificated");
-            if (user.Password != password) return BadRequest("Incorrect password");
+            if (user.Password != credentials.Password) return BadRequest("Incorrect password");
+            #endregion
 
-            
-                var deviceTokenInfo = new UserToken
-                {
-                    UserLogin = user.Login,
-                };
-                _db.UserTokens.Add(deviceTokenInfo);
-                _db.SaveChanges();
-            
-            RefreshToken(deviceTokenInfo);
+            var sessionToken = CreateSession(user);
 
-            try
-            {
-                _db.SaveChanges();
-            }
-            catch 
-            {
-                //Logger
-            }
-            return Ok(new AuthModel(deviceTokenInfo.Token, deviceTokenInfo.RefreshToken, deviceTokenInfo.DateExpire));
-        }
-
-        [Route("api/Auth/Refresh")]
-        [ResponseType(typeof(AuthModel))]
-        public IHttpActionResult PostRefreshToken(string token, string refreshToken)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var deviceTokenInfo = _db.UserTokens.Where(p => p.Token == token).FirstOrDefault();
-            if (deviceTokenInfo == null) return NotFound();
-            if (deviceTokenInfo.RefreshToken != refreshToken) return BadRequest("Incorrect refreshToken");
-
-            RefreshToken(deviceTokenInfo);
-
-            try
-            {
-                _db.SaveChanges();
-            }
+            try { _db.SaveChanges(); }
             catch
             {
                 //Logger
                 return BadRequest("Something went wrong");
             }
-            return Ok(new AuthModel(deviceTokenInfo.Token, deviceTokenInfo.RefreshToken, deviceTokenInfo.DateExpire));
+            return Ok(new TokenModel(sessionToken.Token, sessionToken.RefreshToken, sessionToken.DateExpire));
         }
 
-        [Route("api/Auth/LogOut")]
-        [ResponseType(typeof(AuthModel))]
-        public IHttpActionResult PostLogOut(string token, string deviceId)
+        /// <summary>
+        /// Refresh the token so as not to lose access
+        /// </summary>
+        /// <param name="tokenInfo">Token model</param>
+        /// <returns>Returns new activated token model</returns>
+        [HttpPost]
+        [Route("refresh")]
+        [ResponseType(typeof(TokenModel))]
+        public IHttpActionResult PostRefreshToken([FromBody] TokenModel tokenInfo)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var deviceTokenInfo = _db.UserTokens.Where(p => p.Token == token).FirstOrDefault();
-            if (deviceTokenInfo == null) return NotFound();
+            #region Validating
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            _db.UserTokens.Remove(deviceTokenInfo);
+            var sessionInfo = _db.UserTokens.Where(p => p.Token == tokenInfo.Token).FirstOrDefault();
+            if (sessionInfo == null) return NotFound();
+            if (sessionInfo.RefreshToken != tokenInfo.RefreshToken) return BadRequest("Incorrect refreshToken");
+            #endregion
 
-            try
+            RefreshToken(sessionInfo);
+
+            try { _db.SaveChanges(); }
+            catch
             {
-                _db.SaveChanges();
+                //Logger
+                return BadRequest("Something went wrong");
             }
+            return Ok(new TokenModel(sessionInfo.Token, sessionInfo.RefreshToken, sessionInfo.DateExpire));
+        }
+
+        /// <summary>
+        /// Logout Go Study system
+        /// </summary>
+        /// <param name="token">Account Token</param>
+        /// <returns>Returns http action result code</returns>
+        [HttpPost]
+        [Route("logout")]
+        [ResponseType(typeof(TokenModel))]
+        public IHttpActionResult PostLogOut(string token)
+        {
+            #region Validating
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var sessionInfo = _db.UserTokens.Where(p => p.Token == token).FirstOrDefault();
+            if (sessionInfo == null) return NotFound();
+            #endregion
+
+            _db.UserTokens.Remove(sessionInfo);
+
+            try { _db.SaveChanges(); }
             catch
             {
                 //Logger
@@ -123,6 +112,20 @@ namespace API_Project.Controllers.Authorization
             token.Token = generator.GenerateToken(token.User);
             token.RefreshToken = generator.GenerateToken(token.User);
             token.DateExpire = DateTime.Now.AddSeconds(_timeExpired);
+        }
+
+        private UserToken CreateSession(DataBaseCore.User client)
+        {
+            var sessionToken = new UserToken
+            {
+                UserLogin = client.Login,
+            };
+            RefreshToken(sessionToken);
+
+            _db.UserTokens.Add(sessionToken);
+            _db.SaveChanges();
+
+            return sessionToken;
         }
     }
 }

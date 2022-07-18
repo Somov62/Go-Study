@@ -22,6 +22,12 @@ namespace API_Project.Areas.HelpPage.ModelDescriptions
         private readonly IDictionary<Type, Func<object, string>> AnnotationTextGenerator = new Dictionary<Type, Func<object, string>>
         {
             { typeof(RequiredAttribute), a => "Required" },
+            { typeof(SampleAttribute), a => 
+                {
+                    SampleAttribute sample =(SampleAttribute)a;
+                    return String.Format(CultureInfo.CurrentCulture, "Sample: {0}", sample.Sample);
+                } 
+            },
             { typeof(RangeAttribute), a =>
                 {
                     RangeAttribute range = (RangeAttribute)a;

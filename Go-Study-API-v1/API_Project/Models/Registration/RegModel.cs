@@ -1,11 +1,11 @@
-﻿using DataBaseCore;
-using System;
+﻿using API_Project.Areas.HelpPage.ModelDescriptions;
+using DataBaseCore;
 
 namespace API_Project.Models.Registration
 {
-    public class RegModel
+    public class RegModel : UserModel
     {
-        public RegModel() { }
+        public RegModel() : base () { }
 
         public RegModel(User user)
         {
@@ -13,9 +13,12 @@ namespace API_Project.Models.Registration
             this.UserName = user.UserName;
             this.Role = user.Role.Title;
         }
-        public string Login { get; set; }
-        public string UserName { get; set; }
+
+        /// <summary>
+        /// Account password (MD5 Encrypted) 
+        /// </summary>
+        [Sample("")]
         public string Password { get; set; }
-        public string Role { get; set; }
+        
     }
 }
