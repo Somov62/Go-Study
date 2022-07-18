@@ -17,12 +17,11 @@ namespace API_Project.Controllers.Authorization
 
         //GET:api/Auth
         [ResponseType(typeof(AuthModel))]
-        public IHttpActionResult GetUser(string token, string deviceId)
+        public IHttpActionResult GetUser(string token)
         {
             if (string.IsNullOrEmpty(token)) return BadRequest("Incorrect token");
-            if (string.IsNullOrEmpty(deviceId)) return BadRequest("Incorrect deviceId, please authorize again");
 
-            var userToken = _db.UserTokens.Where(p => p.Token == token).Where(p => p.DeviceId == deviceId).FirstOrDefault();
+            var userToken = _db.UserTokens.Where(p => p.Token == token).FirstOrDefault();
             if (userToken == null) return NotFound();
             
             if (userToken.DateExpire < DateTime.Now) return NotFound();
@@ -32,11 +31,10 @@ namespace API_Project.Controllers.Authorization
 
         // POST: api/Auth
         [ResponseType(typeof(AuthModel))]
-        public IHttpActionResult PostUser(string login, string password, string deviceId)
+        public IHttpActionResult PostUser(string login, string password)
         {
             if (string.IsNullOrEmpty(login)) return BadRequest("Incorrect user data");
             if (string.IsNullOrEmpty(password)) return BadRequest("Incorrect user data");
-            if (string.IsNullOrEmpty(deviceId)) return BadRequest("Incorrect user data");
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -45,18 +43,14 @@ namespace API_Project.Controllers.Authorization
             if (!user.EmailState.IsVerificated) return BadRequest("Email is not verificated");
             if (user.Password != password) return BadRequest("Incorrect password");
 
-            var deviceTokenInfo = user.UserTokens.Where(p => p.DeviceId == deviceId).FirstOrDefault(); 
-            if (deviceTokenInfo == null)
-            {
-                deviceTokenInfo = new UserToken
+            
+                var deviceTokenInfo = new UserToken
                 {
                     UserLogin = user.Login,
-                    DeviceId = deviceId
                 };
                 _db.UserTokens.Add(deviceTokenInfo);
                 _db.SaveChanges();
             
-            }
             RefreshToken(deviceTokenInfo);
 
             try
@@ -104,7 +98,7 @@ namespace API_Project.Controllers.Authorization
             {
                 return BadRequest(ModelState);
             }
-            var deviceTokenInfo = _db.UserTokens.Where(p => p.Token == token).Where(p => p.DeviceId == deviceId).FirstOrDefault();
+            var deviceTokenInfo = _db.UserTokens.Where(p => p.Token == token).FirstOrDefault();
             if (deviceTokenInfo == null) return NotFound();
 
             _db.UserTokens.Remove(deviceTokenInfo);

@@ -212,7 +212,7 @@
           <Property Name="Token" Type="nvarchar(max)" Nullable="false" />
           <Property Name="RefreshToken" Type="nvarchar(max)" Nullable="false" />
           <Property Name="DateExpire" Type="datetime" Nullable="false" />
-          <Property Name="DeviceId" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="NotificationToken" Type="nvarchar(max)" />
         </EntityType>
         <Association Name="FK_College_EducationalInstitution">
           <End Role="EducationalInstitution" Type="Self.EducationalInstitution" Multiplicity="1" />
@@ -894,7 +894,7 @@
           <Property Name="Token" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RefreshToken" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DateExpire" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DeviceId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NotificationToken" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="User" Relationship="Self.FK_UserToken_User" FromRole="UserToken" ToRole="User" />
         </EntityType>
         <Association Name="FK_User_AccessType">
@@ -1554,7 +1554,7 @@
                 <ScalarProperty Name="Token" ColumnName="Token" />
                 <ScalarProperty Name="RefreshToken" ColumnName="RefreshToken" />
                 <ScalarProperty Name="DateExpire" ColumnName="DateExpire" />
-                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="NotificationToken" ColumnName="NotificationToken" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

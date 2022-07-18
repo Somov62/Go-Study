@@ -19,7 +19,7 @@ namespace DataBaseCore
         public string Token { get; set; }
         public string RefreshToken { get; set; }
         public System.DateTime DateExpire { get; set; }
-        public string DeviceId { get; set; }
+        public string NotificationToken { get; set; }
     
         public virtual User User { get; set; }
     }

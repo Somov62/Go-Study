@@ -1,4 +1,7 @@
-﻿using System.Net.Http.Formatting;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 
 namespace API_Project
@@ -21,7 +24,6 @@ namespace API_Project
             config.Formatters.Clear();
             config.Formatters.Add(new JsonMediaTypeFormatter());
 
-            AuthDbLib.TokenCleaner cleaner = new AuthDbLib.TokenCleaner();
         }
     }
 }

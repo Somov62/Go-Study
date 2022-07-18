@@ -10,13 +10,16 @@
 namespace DataBaseCore
 {
     using System;
+    using System.Data.Common;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+    using System.IO;
+    using System.Web;
+
     public partial class DbEntities : DbContext
     {
         public DbEntities()
-            : base("name=DbEntities")
+            : base("name=DbEntities" /*File.ReadAllText(Path.Combine(HttpRuntime.BinDirectory, "ConnectionString.txt"))*/)
         {
         }
     

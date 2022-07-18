@@ -13,7 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSender", "EmailSender\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataValidator", "DataValidater\DataValidator.csproj", "{21594561-6B6C-4D92-8521-68E12A95F324}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_Project", "API_Project\API_Project.csproj", "{08178EF9-B496-45E2-863C-50CFFA9E1E06}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{399DFB51-923B-4A8C-A0E2-07BBF8183947}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_Project", "API_Project\API_Project.csproj", "{9B5BE0A5-597E-4484-8F71-F3FBC6BA43EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +46,10 @@ Global
 		{21594561-6B6C-4D92-8521-68E12A95F324}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21594561-6B6C-4D92-8521-68E12A95F324}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21594561-6B6C-4D92-8521-68E12A95F324}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08178EF9-B496-45E2-863C-50CFFA9E1E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08178EF9-B496-45E2-863C-50CFFA9E1E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08178EF9-B496-45E2-863C-50CFFA9E1E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08178EF9-B496-45E2-863C-50CFFA9E1E06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B5BE0A5-597E-4484-8F71-F3FBC6BA43EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B5BE0A5-597E-4484-8F71-F3FBC6BA43EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B5BE0A5-597E-4484-8F71-F3FBC6BA43EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B5BE0A5-597E-4484-8F71-F3FBC6BA43EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
