@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
+using System.Web;
 using System.Web.Http;
 
 namespace API_Project
@@ -21,6 +22,8 @@ namespace API_Project
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            EmailSender.EmailSender sender = new EmailSender.EmailSender();
+            sender.SimpleSend(new EmailSender.Messages.SuccessConfirmEmailMessage("misha2003980@gmail.com", "popusk"));
             config.Formatters.Clear();
             config.Formatters.Add(new JsonMediaTypeFormatter());
 

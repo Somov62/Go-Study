@@ -9,7 +9,7 @@ using DataBaseCore;
 
 namespace API_Project.Controllers.Authorization
 {
-    [RoutePrefix("auth")]
+    [RoutePrefix("api/auth")]
     public class AuthController : ApiController
     {
         private readonly DbEntities _db = DbEntities.GetContext();

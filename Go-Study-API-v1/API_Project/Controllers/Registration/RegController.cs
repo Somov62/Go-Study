@@ -5,11 +5,12 @@ using System;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Newtonsoft.Json;
+using API_Project.Extensions;
+using System.Web;
 
 namespace API_Project.Controllers.Registration
 {
-    [RoutePrefix("reg")]
+    [RoutePrefix("api/reg")]
     public class RegController : ApiController
     {
         private readonly DbEntities _db = DbEntities.GetContext();
@@ -197,20 +198,25 @@ namespace API_Project.Controllers.Registration
         }
         #endregion
 
+        [HttpGet]
+        [Route("")]
+        public IHttpActionResult Getlol()
+        {
+            
+
+            return Ok();
+        }
+
         private bool SendVerificationCode(DataBaseCore.User user, int code)
         {
             EmailSender.EmailSender sender = new EmailSender.EmailSender();
-            string subject = "Go Study - завершение регистрации";
-            string messege = "Ваш код для подтверждения электронной почты: " + code + "\nВведите код в приложение, для завершения регистрации.\nНе сообщайте никому цифры кода!";
-            return sender.SimpleSend(user.Login, subject, messege, user.UserName);
+            return sender.SimpleSend(new EmailSender.Messages.ConfirmEmailMessage(user.Login, code));
         }
 
         private bool SendVerificationSuccess(DataBaseCore.User user)
         {
             EmailSender.EmailSender sender = new EmailSender.EmailSender();
-            string subject = "Добро пожаловать в Go Study!";
-            string messege = "Вы успешно завершили регистрацию и теперь Вам открыт доступ к приложению. Надеемся, что Go Study будет для Вас отличным помощником в поиске вашего будущего учебного учреждения и чутким наставником на момент обучения! Желаем Вам удачи!\n\nВсегда Ваша - команда Go Study";
-            return sender.SimpleSend(user.Login, subject, messege, user.UserName);
+            return sender.SimpleSend(new EmailSender.Messages.SuccessConfirmEmailMessage(user.Login, user.UserName));
         }
 
         private bool SendResetPasswordCode(DataBaseCore.User user, int code)

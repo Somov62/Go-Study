@@ -1,16 +1,13 @@
 ﻿using API_Project.Models;
 using DataBaseCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 
 namespace API_Project.Controllers.User
 {
-    [RoutePrefix("user")]
+    [RoutePrefix("api/user")]
     public class UserController : ApiController
     {
         private readonly DbEntities _db = DbEntities.GetContext();

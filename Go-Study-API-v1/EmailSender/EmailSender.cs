@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Timers;
@@ -31,7 +32,7 @@ namespace EmailSender
             {
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("gostudymailsender@gmail.com", "daahodezlzbenqbo"),
+                Credentials = new NetworkCredential("gostudymailsender@gmail.com", File.ReadAllText("EmailPassword.txt")),
                 EnableSsl = true
             };
             await smtp.SendMailAsync(message);
@@ -53,6 +54,16 @@ namespace EmailSender
                 Body = messege
             };
             Task.Factory.StartNew(() => SendEmailAsync(mail));
+            return true;
+        }
+        public bool SimpleSend(MailMessage message)
+        {
+            if (countSentEmails == 200)
+            {
+                return false;
+                //throw new System.Exception("The limit of sent messages has been exceeded");
+            }
+            Task.Factory.StartNew(() => SendEmailAsync(message));
             return true;
         }
     }
