@@ -521,7 +521,7 @@
             Allows you to reset the password, sends the code to the account email
             </summary>
             <param name="login">Account email</param>
-            <returns>Returns http action result code</returns>
+            <returns>Returns session number for confirm youself in second part reset password</returns>
         </member>
         <member name="M:API_Project.Controllers.Registration.RegController.PostCheckResetPasswordCode(API_Project.Models.Registration.ResetPasswordModel)">
             <summary>
@@ -582,12 +582,17 @@
             Verification code
             </summary>
         </member>
+        <member name="P:API_Project.Models.Registration.ResetPasswordModel.SessionId">
+            <summary>
+            Verification code
+            </summary>
+        </member>
         <member name="P:API_Project.Models.UserModel.Login">
             <summary>
             User's login (Email)
             </summary>
         </member>
-        <member name="P:API_Project.Models.UserModel.UserName">
+        <member name="P:API_Project.Models.UserModel.Username">
             <summary>
             User's username (may be repeated)
             </summary>

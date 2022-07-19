@@ -10,7 +10,7 @@ namespace API_Project.Models.Registration
         public RegModel(User user)
         {
             this.Login = user.Login;
-            this.UserName = user.UserName;
+            this.Username = user.UserName;
             this.Role = user.Role.Title;
         }
 

@@ -12,7 +12,7 @@ namespace API_Project.Models
         public UserModel(User user)
         {
             this.Login = user.Login;
-            this.UserName = user.UserName;
+            this.Username = user.UserName;
             this.Role = user.Role.Title;
         }
         /// <summary>
@@ -25,7 +25,7 @@ namespace API_Project.Models
         /// User's username (may be repeated)
         /// </summary>
         [Sample("777ilyakos")]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         /// <summary>
         /// User's role. 

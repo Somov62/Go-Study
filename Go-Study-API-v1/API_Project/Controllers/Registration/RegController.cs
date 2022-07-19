@@ -5,8 +5,6 @@ using System;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
-using API_Project.Extensions;
-using System.Web;
 
 namespace API_Project.Controllers.Registration
 {
@@ -29,7 +27,7 @@ namespace API_Project.Controllers.Registration
             #region Validating
             if (string.IsNullOrEmpty(user.Login)) return BadRequest("Incorrect user data");
             if (string.IsNullOrEmpty(user.Password)) return BadRequest("Incorrect user data");
-            if (string.IsNullOrEmpty(user.UserName)) return BadRequest("Incorrect user data");
+            if (string.IsNullOrEmpty(user.Username)) return BadRequest("Incorrect user data");
             if (!ModelState.IsValid) return BadRequest(ModelState);
             DataValidator.DataValidator validator = new DataValidator.DataValidator();
             if (!validator.ValidateEmail(user.Login)) return BadRequest("Incorrect user data");
@@ -42,7 +40,7 @@ namespace API_Project.Controllers.Registration
 
             DataBaseCore.User newUser = new DataBaseCore.User()
             {
-                UserName = user.UserName,
+                UserName = user.Username,
                 Login = user.Login,
                 Password = user.Password,
                 RoleId = _db.Roles.Where(prop => prop.Title == user.Role).FirstOrDefault().Id,
@@ -64,12 +62,13 @@ namespace API_Project.Controllers.Registration
                 _db.Users.Add(newUser);
                 _db.EmailStates.Add(emailState);
                 _db.SaveChanges();
-                if (!SendVerificationCode(newUser, emailState.VerificationCode)) return BadRequest("The limit of sent messages has been exceeded");
+                bool isSendSuccess = SendVerificationCode(newUser.Login, emailState.VerificationCode);
+                if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
-            catch
+            catch (Exception ex)
             {
                 //Logger
-                return BadRequest("Something went wrong");
+                return InternalServerError(new Exception("Something went wrong"));
             }
             return Ok(new UserModel(newUser));
         }
@@ -104,13 +103,13 @@ namespace API_Project.Controllers.Registration
             try
             {
                 _db.SaveChanges();
-                bool isSendSuccess = SendVerificationSuccess(user);
+                bool isSendSuccess = SendVerificationSuccess(user.Login, user.UserName);
                 if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
             catch
             {
                 //Logger
-                return BadRequest("Something went wrong");
+                return InternalServerError(new Exception("Something went wrong"));
             }
             return Ok(new UserModel(user));
         }
@@ -121,10 +120,10 @@ namespace API_Project.Controllers.Registration
         /// Allows you to reset the password, sends the code to the account email
         /// </summary>
         /// <param name="login">Account email</param>
-        /// <returns>Returns http action result code</returns>
+        /// <returns>Returns session number for confirm youself in second part reset password</returns>
         [HttpPost]
         [Route("resetPassword")]
-        [ResponseType(typeof(UserModel))]
+        [ResponseType(typeof(string))]
         public IHttpActionResult PostResetPassword([FromBody] string login)
         {
             #region Validating
@@ -133,24 +132,42 @@ namespace API_Project.Controllers.Registration
 
             var user = _db.Users.Find(login);
             if (user == null) return NotFound();
+            
+            if (!user.EmailState.IsVerificated && _db.ResetPasswordSessions.Where(p=> p.UserLogin == user.Login).Count() == 0)
+            {
+                return BadRequest("Please, finish registration");
+            }
+
             #endregion
 
             Random rnd = new Random();
             user.EmailState.VerificationCode = rnd.Next(23981, 100000);
             user.EmailState.DateSentCode = DateTime.Now;
 
+            _db.ResetPasswordSessions.RemoveRange(_db.ResetPasswordSessions.Where(p => p.UserLogin == user.Login));
+
+            ResetPasswordSession passwordSession = new ResetPasswordSession()
+            {
+                Id = Guid.NewGuid(),
+                UserLogin = user.Login,
+                CancelCode = rnd.Next(2000123, 9999999).ToString()
+            };
+
             try
             {
+                _db.ResetPasswordSessions.Add(passwordSession);
                 _db.SaveChanges();
-                bool isSendSuccess = SendResetPasswordCode(user, user.EmailState.VerificationCode);
+                string key = $"{passwordSession.Id}{passwordSession.CancelCode}";
+                string cancelRequestPath = $"{Request.RequestUri.AbsoluteUri}/{key}/cancel";
+                bool isSendSuccess = SendResetPasswordCode(user.Login, user.EmailState.VerificationCode, cancelRequestPath);
                 if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
             catch
             {
                 //Logger
-                return BadRequest("Something went wrong");
+                return InternalServerError(new Exception("Something went wrong"));
             }
-            return Ok();
+            return Ok(passwordSession.Id);
         }
 
         /// <summary>
@@ -175,64 +192,153 @@ namespace API_Project.Controllers.Registration
 
             var user = _db.Users.Find(resetPasswordData.Login);
             if (user == null) return NotFound();
+            var session = _db.ResetPasswordSessions.Find(resetPasswordData.SessionId);
+            if (session == null) return NotFound();
+
+            if (!user.EmailState.IsVerificated)
+            {
+                return BadRequest("Reset password procedure has been rejected");
+            }
             #endregion
 
             if (user.EmailState.DateSentCode.AddSeconds(600) < DateTime.Now) return BadRequest("Verificated code expired");
             if (user.EmailState.VerificationCode != resetPasswordData.Code) return BadRequest("Incorrect verification code");
 
+
             user.EmailState.VerificationCode = -1;
 
             user.Password = resetPasswordData.Password;
+
+            user.AccessTypeId = 1; 
+
             try
             {
                 _db.SaveChanges();
-                bool isSendSuccess = SendResetPasswordSuccess(user);
+                string key = $"{session.Id}{session.CancelCode}";
+                string freezeRequestPath = $"{Request.RequestUri.AbsoluteUri}/{key}/freeze";
+                bool isSendSuccess = SendResetPasswordSuccess(user.Login, user.UserName, freezeRequestPath);
                 if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
             catch
             {
                 //Logger
-                return BadRequest("Something went wrong");
+                return InternalServerError(new Exception("Something went wrong"));
             }
             return Ok(new UserModel(user));
         }
         #endregion
 
+
+        [HttpGet]
+        [Route("resetPassword/{key}/cancel")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IHttpActionResult CancelResetPasswordSession(string key)
+        {
+            #region Validating
+            if (key.Length < 8) return BadRequest();
+
+            string keyGuid = key.Substring(0, key.Length - 7);
+            string keyCancelCode = key.Substring(key.Length - 7);
+
+            var session = _db.ResetPasswordSessions.Find(Guid.Parse(keyGuid));
+
+            if (session == null) return Ok("Password alreasy changed, check you email");
+
+            if (session.CancelCode != keyCancelCode) return StatusCode(System.Net.HttpStatusCode.Forbidden);
+            #endregion
+
+            _db.ResetPasswordSessions.Remove(session);
+
+            var user = _db.Users.Find(session.UserLogin);
+            if (user != null) user.EmailState.VerificationCode = -1;
+
+            try { _db.SaveChanges(); }
+            catch (Exception ex)
+            {
+                //Logger
+                return InternalServerError(new Exception("Something went wrong"));
+            }
+            return Ok("Session successfuly deleted, account is safe");
+        }
+
+        [HttpGet]
+        [Route("confirmResetPassword/{key}/freeze")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IHttpActionResult FreezeAccount(string key)
+        {
+            #region Validating
+            if (key.Length < 8) return BadRequest();
+
+            string keyGuid = key.Substring(0, key.Length - 7);
+            string keyCancelCode = key.Substring(key.Length - 7);
+
+            var session = _db.ResetPasswordSessions.Find(Guid.Parse(keyGuid));
+
+            if (session == null) return Ok("Password alreasy changed, check you email");
+
+            if (session.CancelCode != keyCancelCode) return StatusCode(System.Net.HttpStatusCode.Forbidden);
+            #endregion
+
+            var user = _db.Users.Find(session.UserLogin);
+            if (user == null) return Ok("Account not found");
+            
+            user.EmailState.VerificationCode = -1;
+            user.AccessTypeId = _db.AccessTypes.Where(p => p.Type == "Blocked").First().Id;
+
+            _db.ResetPasswordSessions.RemoveRange(_db.ResetPasswordSessions.Where(p => p.UserLogin == user.Login));
+            _db.UserTokens.RemoveRange(_db.UserTokens.Where(p => p.UserLogin == user.Login));
+
+            try 
+            { 
+                _db.SaveChanges();
+                bool isSendSuccess = SendAccountFreeze(user.Login, user.UserName);
+                if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
+            }
+            catch (Exception ex)
+            {
+                //Logger
+                return InternalServerError(new Exception("Something went wrong"));
+            }
+            return Ok("Account successfuly freezed");
+        }
+
+
         [HttpGet]
         [Route("")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IHttpActionResult Getlol()
         {
-            
-
-            return Ok();
+            return Ok(Request.RequestUri.AbsoluteUri);
         }
 
-        private bool SendVerificationCode(DataBaseCore.User user, int code)
+        private bool SendVerificationCode(string email, int code)
         {
             EmailSender.EmailSender sender = new EmailSender.EmailSender();
-            return sender.SimpleSend(new EmailSender.Messages.ConfirmEmailMessage(user.Login, code));
+            return sender.SimpleSend(new EmailSender.Messages.ConfirmEmailMessage(email, code));
         }
 
-        private bool SendVerificationSuccess(DataBaseCore.User user)
+        private bool SendVerificationSuccess(string email, string username)
         {
             EmailSender.EmailSender sender = new EmailSender.EmailSender();
-            return sender.SimpleSend(new EmailSender.Messages.SuccessConfirmEmailMessage(user.Login, user.UserName));
+            return sender.SimpleSend(new EmailSender.Messages.SuccessConfirmEmailMessage(email, username));
         }
 
-        private bool SendResetPasswordCode(DataBaseCore.User user, int code)
+        private bool SendResetPasswordCode(string email, int code, string cancelRequestPath)
         {
             EmailSender.EmailSender sender = new EmailSender.EmailSender();
-            string subject = "Go Study - восстановление пароля";
-            string messege = "Ваш код для восстановления пароля учётной записи: " + code + "\nВведите код в приложение, для сброса пароля.\nНе сообщайте никому цифры кода!";
-            return sender.SimpleSend(user.Login, subject, messege, user.UserName);
+            return sender.SimpleSend(new EmailSender.Messages.ConfirmResetPasswordMessage(email, code, cancelRequestPath));
         }
 
-        private bool SendResetPasswordSuccess(DataBaseCore.User user)
+        private bool SendResetPasswordSuccess(string email, string username, string freezeRequestPath)
         {
             EmailSender.EmailSender sender = new EmailSender.EmailSender();
-            string subject = "Go Study - пароль изменён";
-            string messege = "Вы успешно сбросили пароль вашей учётной записи. Если это сделали не Вы, и считаете это подозрительным, ответьте на это сообщение.";
-            return sender.SimpleSend(user.Login, subject, messege, user.UserName);
+            return sender.SimpleSend(new EmailSender.Messages.SuccessResetPasswordMessage(email, username, freezeRequestPath));
+        }
+
+        private bool SendAccountFreeze(string email, string username)
+        {
+            EmailSender.EmailSender sender = new EmailSender.EmailSender();
+            return sender.SimpleSend(new EmailSender.Messages.FreezeAccountMessage(email, username));
         }
         protected override void Dispose(bool disposing) => base.Dispose(disposing);
 

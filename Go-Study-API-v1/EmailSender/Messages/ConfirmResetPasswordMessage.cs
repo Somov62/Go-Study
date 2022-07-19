@@ -12,7 +12,7 @@ namespace EmailSender.Messages
         {
             base.Subject = "Go Study - восстановление пароля";
             string pathToHtml = Path.Combine(HttpRuntime.AppDomainAppPath.Replace("\\API_Project", ""), "EmailSender", "Messages", "Views", "ConfirmResetPasswordMessage.html");
-            base.Body = File.ReadAllText(pathToHtml).Replace("REPLACE_CODE", code.ToString().Replace("REPLACE_ADRESS", cancelRequestPath));
+            base.Body = File.ReadAllText(pathToHtml).Replace("REPLACE_CODE", code.ToString()).Replace("REPLACE_ADRESS", cancelRequestPath);
             base.IsBodyHtml = true;
         }
     }

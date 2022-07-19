@@ -117,6 +117,9 @@
     <Compile Include="MediaFile.cs">
       <DependentUpon>DbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ResetPasswordSession.cs">
+      <DependentUpon>DbModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Role.cs">
       <DependentUpon>DbModel.tt</DependentUpon>
     </Compile>

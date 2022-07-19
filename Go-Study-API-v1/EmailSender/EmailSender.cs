@@ -3,13 +3,14 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Web;
 
 namespace EmailSender
 {
     public class EmailSender
     {
         private static int countSentEmails = 0;
-        private static Timer _timer = new Timer()
+        private static readonly Timer _timer = new Timer()
         {
             AutoReset = true,
             Enabled = true,
@@ -32,7 +33,7 @@ namespace EmailSender
             {
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("gostudymailsender@gmail.com", File.ReadAllText("EmailPassword.txt")),
+                Credentials = new NetworkCredential("gostudymailsender@gmail.com", File.ReadAllText(Path.Combine(HttpRuntime.AppDomainAppPath.Replace("\\API_Project", ""), "EmailSender", "EmailPassword.txt"))),
                 EnableSsl = true
             };
             await smtp.SendMailAsync(message);

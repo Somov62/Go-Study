@@ -6,6 +6,7 @@ using System.Web.Http.Description;
 using API_Project.Models.Authorization;
 using AuthDbLib;
 using DataBaseCore;
+using API_Project.Extensions;
 
 namespace API_Project.Controllers.Authorization
 {
@@ -15,6 +16,7 @@ namespace API_Project.Controllers.Authorization
         private readonly DbEntities _db = DbEntities.GetContext();
         private readonly int _timeExpired = 300;
 
+        #region API methods
         /// <summary>
         /// Authorization user in system. Getting a token.
         /// </summary>
@@ -33,17 +35,29 @@ namespace API_Project.Controllers.Authorization
 
             var user = _db.Users.Find(credentials.Login);
             if (user == null) return NotFound();
+
+            if (user.AccessTypeId == _db.AccessTypes.Where(p => p.Type == "Blocked").First().Id) 
+                return BadRequest("Account blocked. Please, change password");
+
             if (!user.EmailState.IsVerificated) return BadRequest("Email is not verificated");
             if (user.Password != credentials.Password) return BadRequest("Incorrect password");
             #endregion
 
-            var sessionToken = CreateSession(user);
+            UserToken sessionToken = CreateSession(user);
 
-            try { _db.SaveChanges(); }
+            try
+            {
+                _db.SaveChanges();
+
+                Guid recordId = _db.UserTokens.Where(p => p.Token == sessionToken.Token).First().Id;
+                string banUrl = $"{Request.RequestUri.AbsoluteUri}/{recordId}{sessionToken.Token.Substring(1, 5)}/logout";
+                bool isSendSuccess = SendLoginMessage(user.Login, banUrl, Request.GetClientIpAddress());
+                if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
+            }
             catch
             {
                 //Logger
-                return BadRequest("Something went wrong");
+                return InternalServerError(new Exception("Something went wrong"));
             }
             return Ok(new TokenModel(sessionToken.Token, sessionToken.RefreshToken, sessionToken.DateExpire));
         }
@@ -72,7 +86,7 @@ namespace API_Project.Controllers.Authorization
             catch
             {
                 //Logger
-                return BadRequest("Something went wrong");
+                return InternalServerError(new Exception("Something went wrong"));
             }
             return Ok(new TokenModel(sessionInfo.Token, sessionInfo.RefreshToken, sessionInfo.DateExpire));
         }
@@ -99,11 +113,41 @@ namespace API_Project.Controllers.Authorization
             catch
             {
                 //Logger
-                return BadRequest("Something went wrong");
+                return InternalServerError(new Exception("Something went wrong"));
             }
             return Ok();
         }
 
+        [HttpGet]
+        [Route("{id}/logout")]
+        [ResponseType(typeof(TokenModel))]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IHttpActionResult BanLogOut(string id)
+        {
+            #region Validating
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var guid = Guid.Parse(id.Substring(0, id.Length - 5));
+            var sessionInfo = _db.UserTokens.Find(guid);
+            if (sessionInfo == null) return NotFound();
+
+            if (sessionInfo.Token.Substring(1, 5) != id.Substring(id.Length - 5)) return BadRequest();
+            #endregion
+
+            _db.UserTokens.Remove(sessionInfo);
+
+            try { _db.SaveChanges(); }
+            catch
+            {
+                //Logger
+                return InternalServerError(new Exception("Something went wrong"));
+            }
+            return Ok("Suspicious session successfully terminated");
+        }
+
+        #endregion
+
+        #region Supportive methods
         protected override void Dispose(bool disposing) =>  base.Dispose(disposing);
 
         private void RefreshToken(UserToken token)
@@ -116,16 +160,25 @@ namespace API_Project.Controllers.Authorization
 
         private UserToken CreateSession(DataBaseCore.User client)
         {
-            var sessionToken = new UserToken
+            UserToken sessionToken = new UserToken
             {
+                Id = Guid.NewGuid(),
                 UserLogin = client.Login,
+                User = client
             };
-            RefreshToken(sessionToken);
 
+            RefreshToken(sessionToken);
+            sessionToken.User = null;
             _db.UserTokens.Add(sessionToken);
             _db.SaveChanges();
-
             return sessionToken;
         }
+
+        private bool SendLoginMessage(string email, string resetAddress, string ipAddress)
+        {
+            EmailSender.EmailSender sender = new EmailSender.EmailSender();
+            return sender.SimpleSend(new EmailSender.Messages.LoginMessage(email, resetAddress, ipAddress));
+        }
+        #endregion
     }
 }

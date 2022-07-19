@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище DbModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище DbModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccessType">
           <Key>
             <PropertyRef Name="Id" />
@@ -160,6 +160,14 @@
           <Property Name="MediaURL" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
+        <EntityType Name="ResetPasswordSession">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserLogin" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CancelCode" Type="nchar" MaxLength="7" Nullable="false" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="Id" />
@@ -207,7 +215,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="UserLogin" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Token" Type="nvarchar(max)" Nullable="false" />
           <Property Name="RefreshToken" Type="nvarchar(max)" Nullable="false" />
@@ -538,6 +546,7 @@
           <EntitySet Name="FeedbackStatsForm" EntityType="Self.FeedbackStatsForm" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FormOfEducation" EntityType="Self.FormOfEducation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MediaFile" EntityType="Self.MediaFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResetPasswordSession" EntityType="Self.ResetPasswordSession" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SpecializationInfo" EntityType="Self.SpecializationInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -637,8 +646,7 @@
             <End Role="UserToken" EntitySet="UserToken" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -833,6 +841,14 @@
           <NavigationProperty Name="EducationMedias" Relationship="Self.FK_EducationMedia_Media" FromRole="MediaFile" ToRole="EducationMedia" />
           <NavigationProperty Name="FeedbackMedias" Relationship="Self.FK_FeedbackMedia_Media" FromRole="MediaFile" ToRole="FeedbackMedia" />
         </EntityType>
+        <EntityType Name="ResetPasswordSession">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="UserLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CancelCode" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="true" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="Id" />
@@ -889,7 +905,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="UserLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Token" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RefreshToken" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
@@ -1221,6 +1237,7 @@
           <EntitySet Name="FeedbackStatsForms" EntityType="Self.FeedbackStatsForm" />
           <EntitySet Name="FormOfEducations" EntityType="Self.FormOfEducation" />
           <EntitySet Name="MediaFiles" EntityType="Self.MediaFile" />
+          <EntitySet Name="ResetPasswordSessions" EntityType="Self.ResetPasswordSession" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="SpecializationInfoes" EntityType="Self.SpecializationInfo" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
@@ -1495,6 +1512,15 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="MediaURL" ColumnName="MediaURL" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResetPasswordSessions">
+            <EntityTypeMapping TypeName="DbModel.ResetPasswordSession">
+              <MappingFragment StoreEntitySet="ResetPasswordSession">
+                <ScalarProperty Name="CancelCode" ColumnName="CancelCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserLogin" ColumnName="UserLogin" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

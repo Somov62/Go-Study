@@ -18,6 +18,7 @@ namespace API_Project.Controllers.User
         /// <param name="token">Auth token</param>
         /// <returns>Returns information about user as usermodel</returns>
         [HttpGet]
+        [Route("")]
         [ResponseType(typeof(UserModel))]
         //[ApiExplorerSettings(IgnoreApi = true)]
         public IHttpActionResult GetUser(string token)
@@ -25,7 +26,7 @@ namespace API_Project.Controllers.User
             if (string.IsNullOrEmpty(token)) return BadRequest("Incorrect token");
 
             var userToken = _db.UserTokens.Where(p => p.Token == token).FirstOrDefault();
-            if (userToken == null) return NotFound();
+            if (userToken == null) return BadRequest("Incorrect token");
 
             if (userToken.DateExpire < DateTime.Now) return NotFound();
 

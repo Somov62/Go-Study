@@ -50,6 +50,7 @@
     <Compile Include="EmailSender.cs" />
     <Compile Include="Messages\ConfirmEmailMessage.cs" />
     <Compile Include="Messages\ConfirmResetPasswordMessage.cs" />
+    <Compile Include="Messages\FreezeAccountMessage.cs" />
     <Compile Include="Messages\LoginMessage.cs" />
     <Compile Include="Messages\SuccessConfirmEmailMessage.cs" />
     <Compile Include="Messages\SuccessResetPasswordMessage.cs" />
@@ -59,6 +60,7 @@
     <Content Include="EmailPassword.txt" />
     <Content Include="Messages\Views\ConfirmEmailMessage.html" />
     <Content Include="Messages\Views\ConfirmResetPasswordMessage.html" />
+    <Content Include="Messages\Views\FreezeAccountMessage.html" />
     <Content Include="Messages\Views\LoginMessage.html" />
     <Content Include="Messages\Views\SuccessConfirmEmailMessage.html" />
     <Content Include="Messages\Views\SuccessResetPasswordMessage.html" />

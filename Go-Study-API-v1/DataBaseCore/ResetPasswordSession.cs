@@ -12,15 +12,10 @@ namespace DataBaseCore
     using System;
     using System.Collections.Generic;
     
-    public partial class UserToken
+    public partial class ResetPasswordSession
     {
         public System.Guid Id { get; set; }
         public string UserLogin { get; set; }
-        public string Token { get; set; }
-        public string RefreshToken { get; set; }
-        public System.DateTime DateExpire { get; set; }
-        public string NotificationToken { get; set; }
-    
-        public virtual User User { get; set; }
+        public string CancelCode { get; set; }
     }
 }

@@ -10,16 +10,13 @@
 namespace DataBaseCore
 {
     using System;
-    using System.Data.Common;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.IO;
-    using System.Web;
-
+    
     public partial class DbEntities : DbContext
     {
         public DbEntities()
-            : base("name=DbEntities" /*File.ReadAllText(Path.Combine(HttpRuntime.BinDirectory, "ConnectionString.txt"))*/)
+            : base("name=DbEntities")
         {
         }
     
@@ -45,6 +42,7 @@ namespace DataBaseCore
         public virtual DbSet<FeedbackStatsForm> FeedbackStatsForms { get; set; }
         public virtual DbSet<FormOfEducation> FormOfEducations { get; set; }
         public virtual DbSet<MediaFile> MediaFiles { get; set; }
+        public virtual DbSet<ResetPasswordSession> ResetPasswordSessions { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<SpecializationInfo> SpecializationInfoes { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
