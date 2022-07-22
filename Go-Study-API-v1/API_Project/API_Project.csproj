@@ -156,6 +156,7 @@
     <Compile Include="Controllers\Authorization\AuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Registration\RegController.cs" />
+    <Compile Include="Controllers\ServerLogs\LogController.cs" />
     <Compile Include="Controllers\User\UserController.cs" />
     <Compile Include="Extensions\HttpRequestMessageExtensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -163,6 +164,7 @@
     </Compile>
     <Compile Include="Models\Authorization\CredentialModel.cs" />
     <Compile Include="Models\Authorization\TokenModel.cs" />
+    <Compile Include="Models\Log\LogModel.cs" />
     <Compile Include="Models\Registration\EmailVerficationModel.cs" />
     <Compile Include="Models\Registration\RegModel.cs" />
     <Compile Include="Models\Registration\ResetPasswordModel.cs" />
@@ -173,9 +175,9 @@
   <ItemGroup>
     <Content Include="App_Data\XmlDocument.xml" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
-    <Content Include="ConnectionString.txt">
+    <None Include="ConnectionString.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -282,9 +284,9 @@
       <Project>{c9ccdb0f-2da9-40b8-9b05-1ea2bb06c8e1}</Project>
       <Name>EmailSender</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Logger\Logger.csproj">
-      <Project>{fa24bda1-1358-4407-afd7-5acdf036f249}</Project>
-      <Name>Logger</Name>
+    <ProjectReference Include="..\LoggerLib\LoggerLib.csproj">
+      <Project>{cfa567ed-b7cc-42fd-8d09-95ee3e969b7b}</Project>
+      <Name>LoggerLib</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

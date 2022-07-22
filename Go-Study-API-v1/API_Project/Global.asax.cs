@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -20,7 +21,9 @@ namespace API_Project
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
 
-            AuthDbLib.TokenCleaner cleaner = new AuthDbLib.TokenCleaner();
+            string projectName = Assembly.GetExecutingAssembly().GetName().Name;
+            _ = new LoggerLib.Logger(HttpRuntime.AppDomainAppPath.Replace(projectName, "LoggerLib"));
+            _ = new AuthDbLib.TokenCleaner();
         }
     }
 }

@@ -11,6 +11,7 @@ namespace API_Project.Controllers.User
     public class UserController : ApiController
     {
         private readonly DbEntities _db = DbEntities.GetContext();
+        private readonly LoggerLib.Logger _logger = LoggerLib.Logger.GetContext();
 
         /// <summary>
         /// Get user by his token
@@ -23,6 +24,11 @@ namespace API_Project.Controllers.User
         //[ApiExplorerSettings(IgnoreApi = true)]
         public IHttpActionResult GetUser(string token)
         {
+            _logger.CreateLog(
+                new LoggerLib.LogModels.Base.BaseLogModel()
+                {
+                    Message = "Try Get user by token: " + token
+                });
             if (string.IsNullOrEmpty(token)) return BadRequest("Incorrect token");
 
             var userToken = _db.UserTokens.Where(p => p.Token == token).FirstOrDefault();

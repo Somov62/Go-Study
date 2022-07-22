@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Web;
 
 namespace EmailSender
 {
@@ -20,7 +19,10 @@ namespace EmailSender
         {
             _timer.Elapsed -= Timer_Elapsed;
             _timer.Elapsed += Timer_Elapsed;
+            PathToAccessFile = Path.Combine(System.Web.HttpRuntime.AppDomainAppPath.Replace("API_Project", ""), "Credentilas", "EmailPassword.txt");
         }
+
+        public string PathToAccessFile { get; }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -29,11 +31,12 @@ namespace EmailSender
 
         private async Task SendEmailAsync(MailMessage message)
         {
+            
             SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587)
             {
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("gostudymailsender@gmail.com", File.ReadAllText(Path.Combine(HttpRuntime.AppDomainAppPath.Replace("\\API_Project", ""), "EmailSender", "EmailPassword.txt"))),
+                Credentials = new NetworkCredential("gostudymailsender@gmail.com", File.ReadAllText(PathToAccessFile)),
                 EnableSsl = true
             };
             await smtp.SendMailAsync(message);

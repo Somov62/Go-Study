@@ -562,6 +562,16 @@
             Date expired token. Refresh the token so as not to lose access
             </summary>
         </member>
+        <member name="P:API_Project.Models.Log.LogModel.FileName">
+            <summary>
+            Actual log`s filename in storage
+            </summary>
+        </member>
+        <member name="P:API_Project.Models.Log.LogModel.Content">
+            <summary>
+            Log content
+            </summary>
+        </member>
         <member name="P:API_Project.Models.Registration.EmailVerficationModel.Email">
             <summary>
             The email you need to confirm 

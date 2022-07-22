@@ -1,6 +1,8 @@
-﻿using API_Project.Models;
+﻿using API_Project.Extensions;
+using API_Project.Models;
 using API_Project.Models.Registration;
 using DataBaseCore;
+using LoggerLib;
 using System;
 using System.Linq;
 using System.Web.Http;
@@ -11,6 +13,7 @@ namespace API_Project.Controllers.Registration
     [RoutePrefix("api/reg")]
     public class RegController : ApiController
     {
+        private readonly Logger _logger = Logger.GetContext();
         private readonly DbEntities _db = DbEntities.GetContext();
 
         #region Registration new user
@@ -67,9 +70,28 @@ namespace API_Project.Controllers.Registration
             }
             catch (Exception ex)
             {
-                //Logger
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при сохранении нового аккаунта.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
                 return InternalServerError(new Exception("Something went wrong"));
             }
+
+            #region log
+            _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Trace,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Успешная регистрация.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+            #endregion
             return Ok(new UserModel(newUser));
         }
 
@@ -106,11 +128,29 @@ namespace API_Project.Controllers.Registration
                 bool isSendSuccess = SendVerificationSuccess(user.Login, user.UserName);
                 if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
-            catch
+            catch (Exception ex)
             {
-                //Logger
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при сохранении подтверждения почты.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
                 return InternalServerError(new Exception("Something went wrong"));
             }
+            #region log
+            _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Trace,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Успешное подтверждение электронной почты.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+            #endregion
             return Ok(new UserModel(user));
         }
         #endregion
@@ -135,9 +175,17 @@ namespace API_Project.Controllers.Registration
             
             if (!user.EmailState.IsVerificated && _db.ResetPasswordSessions.Where(p=> p.UserLogin == user.Login).Count() == 0)
             {
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Warning,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Попытка сбросить пароль на аккаунте с неподтвержденной почтой.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
                 return BadRequest("Please, finish registration");
             }
-
             #endregion
 
             Random rnd = new Random();
@@ -162,11 +210,29 @@ namespace API_Project.Controllers.Registration
                 bool isSendSuccess = SendResetPasswordCode(user.Login, user.EmailState.VerificationCode, cancelRequestPath);
                 if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
-            catch
+            catch (Exception ex)
             {
-                //Logger
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при попытке сброса пароля.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
                 return InternalServerError(new Exception("Something went wrong"));
             }
+            #region log
+            _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Trace,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Успешный 1 этап сброса пароля.\nLogin: {user.Login}\nPasswordSession: {passwordSession.Id}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+            #endregion
             return Ok(passwordSession.Id);
         }
 
@@ -204,7 +270,6 @@ namespace API_Project.Controllers.Registration
             if (user.EmailState.DateSentCode.AddSeconds(600) < DateTime.Now) return BadRequest("Verificated code expired");
             if (user.EmailState.VerificationCode != resetPasswordData.Code) return BadRequest("Incorrect verification code");
 
-
             user.EmailState.VerificationCode = -1;
 
             user.Password = resetPasswordData.Password;
@@ -219,11 +284,29 @@ namespace API_Project.Controllers.Registration
                 bool isSendSuccess = SendResetPasswordSuccess(user.Login, user.UserName, freezeRequestPath);
                 if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
-            catch
+            catch (Exception ex)
             {
-                //Logger
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при сохранении сброшенного пароля.\nLogin: {user.Login}\nPasswordSession: {resetPasswordData.SessionId}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
                 return InternalServerError(new Exception("Something went wrong"));
             }
+            #region log
+            _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Trace,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Успешный 2 этап сброса пароля.\nLogin: {user.Login}\nPasswordSession: {resetPasswordData.SessionId}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+            #endregion
             return Ok(new UserModel(user));
         }
         #endregion
@@ -242,7 +325,7 @@ namespace API_Project.Controllers.Registration
 
             var session = _db.ResetPasswordSessions.Find(Guid.Parse(keyGuid));
 
-            if (session == null) return Ok("Password alreasy changed, check you email");
+            if (session == null) return Ok("Password already changed, check you email");
 
             if (session.CancelCode != keyCancelCode) return StatusCode(System.Net.HttpStatusCode.Forbidden);
             #endregion
@@ -255,9 +338,27 @@ namespace API_Project.Controllers.Registration
             try { _db.SaveChanges(); }
             catch (Exception ex)
             {
-                //Logger
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при сохранении отмены сброса пароля.\nLogin: {user.Login}\nPasswordSession: {keyGuid}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
                 return InternalServerError(new Exception("Something went wrong"));
             }
+            #region log
+            _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Trace,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Сессия сброса пароля отменена.\nLogin: {user.Login}\nPasswordSession: {keyGuid}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+            #endregion
             return Ok("Session successfuly deleted, account is safe");
         }
 
@@ -296,9 +397,27 @@ namespace API_Project.Controllers.Registration
             }
             catch (Exception ex)
             {
-                //Logger
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при сохранении заморозки аккаунта.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
                 return InternalServerError(new Exception("Something went wrong"));
             }
+            #region log
+            _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Trace,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Аккаунт заморожен.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+            #endregion
             return Ok("Account successfuly freezed");
         }
 

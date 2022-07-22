@@ -1,2 +1,3 @@
-ConnectionString.txt
+ConnectionString.config
 EmailPassword.txt
+LogAccess.txt

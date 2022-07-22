@@ -7,12 +7,14 @@ using API_Project.Models.Authorization;
 using AuthDbLib;
 using DataBaseCore;
 using API_Project.Extensions;
+using LoggerLib;
 
 namespace API_Project.Controllers.Authorization
 {
     [RoutePrefix("api/auth")]
     public class AuthController : ApiController
     {
+        private readonly Logger _logger = Logger.GetContext();
         private readonly DbEntities _db = DbEntities.GetContext();
         private readonly int _timeExpired = 300;
 
@@ -36,8 +38,19 @@ namespace API_Project.Controllers.Authorization
             var user = _db.Users.Find(credentials.Login);
             if (user == null) return NotFound();
 
-            if (user.AccessTypeId == _db.AccessTypes.Where(p => p.Type == "Blocked").First().Id) 
+            if (user.AccessTypeId == _db.AccessTypes.Where(p => p.Type == "Blocked").First().Id)
+            {
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Warning,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Попытка войти в заблокированный аккаунт.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
                 return BadRequest("Account blocked. Please, change password");
+            }
 
             if (!user.EmailState.IsVerificated) return BadRequest("Email is not verificated");
             if (user.Password != credentials.Password) return BadRequest("Incorrect password");
@@ -54,11 +67,29 @@ namespace API_Project.Controllers.Authorization
                 bool isSendSuccess = SendLoginMessage(user.Login, banUrl, Request.GetClientIpAddress());
                 if (!isSendSuccess) return BadRequest("The limit of sent messages has been exceeded");
             }
-            catch
+            catch (Exception ex)
             {
-                //Logger
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при сохранении авторизации.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
                 return InternalServerError(new Exception("Something went wrong"));
             }
+            #region log
+            _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Trace,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Успешная авторизация.\nLogin: {user.Login}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+            #endregion
             return Ok(new TokenModel(sessionToken.Token, sessionToken.RefreshToken, sessionToken.DateExpire));
         }
 
@@ -77,17 +108,47 @@ namespace API_Project.Controllers.Authorization
 
             var sessionInfo = _db.UserTokens.Where(p => p.Token == tokenInfo.Token).FirstOrDefault();
             if (sessionInfo == null) return NotFound();
-            if (sessionInfo.RefreshToken != tokenInfo.RefreshToken) return BadRequest("Incorrect refreshToken");
+            if (sessionInfo.RefreshToken != tokenInfo.RefreshToken)
+            {
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Warning,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Обновление токена отклонено. Совпадение токенов, но несовпадение токенов для обновления.\nLogin: {sessionInfo.UserLogin}\nSession: {sessionInfo.Token}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
+                return BadRequest("Incorrect refreshToken");
+            }
             #endregion
 
             RefreshToken(sessionInfo);
 
             try { _db.SaveChanges(); }
-            catch
+            catch (Exception ex)
             {
-                //Logger
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при сохранении обновленного токена.\nLogin: {sessionInfo.UserLogin}\nToken: {tokenInfo.Token}\nIp-Address: {Request.GetClientIpAddress()}"
+                    });
+                #endregion
                 return InternalServerError(new Exception("Something went wrong"));
             }
+            #region log
+            _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Trace,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Успешное обновление токена.\nLogin: {sessionInfo.UserLogin}"
+                    });
+            #endregion
             return Ok(new TokenModel(sessionInfo.Token, sessionInfo.RefreshToken, sessionInfo.DateExpire));
         }
 
@@ -110,11 +171,29 @@ namespace API_Project.Controllers.Authorization
             _db.UserTokens.Remove(sessionInfo);
 
             try { _db.SaveChanges(); }
-            catch
+            catch (Exception ex)
             {
-                //Logger
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при сохранении выхода из аккаунта.\nLogin: {sessionInfo.UserLogin}\nSession: {sessionInfo.Token}"
+                    });
+                #endregion
                 return InternalServerError(new Exception("Something went wrong"));
             }
+            #region log
+            _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Trace,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Успешный выход из аккаунта.\nLogin: {sessionInfo.UserLogin}\nSession: {sessionInfo.Token}"
+                    });
+            #endregion
             return Ok();
         }
 
@@ -137,11 +216,29 @@ namespace API_Project.Controllers.Authorization
             _db.UserTokens.Remove(sessionInfo);
 
             try { _db.SaveChanges(); }
-            catch
+            catch (Exception ex)
             {
-                //Logger
+                #region log
+                _logger.CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при принудительном завершении сессии.\nLogin: {sessionInfo.UserLogin}\nSession: {sessionInfo.Token}"
+                    });
+                #endregion
                 return InternalServerError(new Exception("Something went wrong"));
             }
+            #region log
+            _logger.CreateLog(
+                    new LoggerLib.LogModels.Base.BaseLogModel()
+                    {
+                        Type = LogType.Trace,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Заблокированная сессия.\nLogin: {sessionInfo.UserLogin}\nSession: {sessionInfo.Token}"
+                    });
+            #endregion
             return Ok("Suspicious session successfully terminated");
         }
 
