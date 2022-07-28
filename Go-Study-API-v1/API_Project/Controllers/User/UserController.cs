@@ -24,6 +24,7 @@ namespace API_Project.Controllers.User
         //[ApiExplorerSettings(IgnoreApi = true)]
         public IHttpActionResult GetUser(string token)
         {
+            ServerState.State.CountRequests++;
             _logger.CreateLog(
                 new LoggerLib.LogModels.Base.BaseLogModel()
                 {

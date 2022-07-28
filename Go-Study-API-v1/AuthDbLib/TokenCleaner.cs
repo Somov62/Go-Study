@@ -20,23 +20,24 @@ namespace AuthDbLib
             var db = DbEntities.GetContext();
 
             var expireTokens = db.UserTokens.Where(p => p.DateExpire < DateTime.Now && p.Token != string.Empty).ToList();
-            foreach (var item in expireTokens)
+            try 
             {
-                ClearUserToken(item);
+                db.UserTokens.RemoveRange(expireTokens);
+                db.SaveChanges(); 
             }
-        }
-
-        public void ClearUserToken(UserToken user)
-        {
-            var db = DbEntities.GetContext();
-            user.DateExpire = new DateTime(1753, 1, 1);
-            user.Token = string.Empty;
-            user.RefreshToken = string.Empty;
-            try { db.SaveChanges(); }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("error");
-             
+                #region log
+                LoggerLib.Logger.GetContext().CreateLog(
+                    new LoggerLib.LogModels.ExceptionLogModel()
+                    {
+                        Type = LoggerLib.LogType.Error,
+                        Exception = ex,
+                        CurrentMethod = System.Reflection.MethodBase.GetCurrentMethod().Name,
+                        Message = $"Ошибка при очистке устаревших токенов."
+                    });
+                #endregion
             }
         }
 

@@ -8,7 +8,7 @@ namespace EmailSender
 {
     public class EmailSender
     {
-        private static int countSentEmails = 0;
+        private static int _countSentEmails = 0;
         private static readonly Timer _timer = new Timer()
         {
             AutoReset = true,
@@ -23,10 +23,11 @@ namespace EmailSender
         }
 
         public string PathToAccessFile { get; }
+        public static int ConutSentEmails => _countSentEmails;
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            countSentEmails = 0;
+            _countSentEmails = 0;
         }
 
         private async Task SendEmailAsync(MailMessage message)
@@ -40,12 +41,12 @@ namespace EmailSender
                 EnableSsl = true
             };
             await smtp.SendMailAsync(message);
-            countSentEmails++;
+            _countSentEmails++;
         }
 
         public bool SimpleSend(string email, string subject, string messege, string recipientName = "Someone")
         {
-            if (countSentEmails == 200)
+            if (_countSentEmails == 200)
             {
                 return false;
                 //throw new System.Exception("The limit of sent messages has been exceeded");
@@ -62,7 +63,7 @@ namespace EmailSender
         }
         public bool SimpleSend(MailMessage message)
         {
-            if (countSentEmails == 200)
+            if (_countSentEmails == 200)
             {
                 return false;
                 //throw new System.Exception("The limit of sent messages has been exceeded");

@@ -16,6 +16,7 @@ namespace LoggerLib
         }
         
         public LoggerDirectory Directory => _directory;
+        public int CountTodayLogs => _idCounter;
 
         public static Logger GetContext()
         {

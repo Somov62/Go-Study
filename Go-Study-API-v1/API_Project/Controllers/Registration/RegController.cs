@@ -27,6 +27,7 @@ namespace API_Project.Controllers.Registration
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult PostUser([FromBody] RegModel user)
         {
+            ServerState.State.CountRequests++;
             #region Validating
             if (string.IsNullOrEmpty(user.Login)) return BadRequest("Incorrect user data");
             if (string.IsNullOrEmpty(user.Password)) return BadRequest("Incorrect user data");
@@ -105,6 +106,7 @@ namespace API_Project.Controllers.Registration
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult PostCheckVerificationCode([FromBody] EmailVerficationModel verficationData)
         {
+            ServerState.State.CountRequests++;
             #region Validating
             if (string.IsNullOrEmpty(verficationData.Email)) return BadRequest("Incorrect email");
             if (verficationData.Code < 23981 || verficationData.Code > 100000) return BadRequest("Incorrect verification code");
@@ -166,6 +168,7 @@ namespace API_Project.Controllers.Registration
         [ResponseType(typeof(string))]
         public IHttpActionResult PostResetPassword([FromBody] string login)
         {
+            ServerState.State.CountRequests++;
             #region Validating
             if (string.IsNullOrEmpty(login)) return BadRequest("Incorrect email");
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -246,6 +249,7 @@ namespace API_Project.Controllers.Registration
         [ResponseType(typeof(UserModel))]
         public IHttpActionResult PostCheckResetPasswordCode([FromBody] ResetPasswordModel resetPasswordData)
         {
+            ServerState.State.CountRequests++;
             #region Validating
             if (string.IsNullOrEmpty(resetPasswordData.Login)) return BadRequest("Incorrect email");
             if (string.IsNullOrEmpty(resetPasswordData.Password)) return BadRequest("Incorrect password");
@@ -317,6 +321,7 @@ namespace API_Project.Controllers.Registration
         [ApiExplorerSettings(IgnoreApi = true)]
         public IHttpActionResult CancelResetPasswordSession(string key)
         {
+            ServerState.State.CountRequests++;
             #region Validating
             if (key.Length < 8) return BadRequest();
 
@@ -367,6 +372,7 @@ namespace API_Project.Controllers.Registration
         [ApiExplorerSettings(IgnoreApi = true)]
         public IHttpActionResult FreezeAccount(string key)
         {
+            ServerState.State.CountRequests++;
             #region Validating
             if (key.Length < 8) return BadRequest();
 

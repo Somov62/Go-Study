@@ -29,7 +29,7 @@ namespace LoggerLib
 
         internal bool TodayLogExists()
         {
-            string pathToFile = Path.Combine(_pathToFolder, DateTime.Now.ToString("d"));
+            string pathToFile = Path.Combine(_pathToFolder, DateTime.Now.ToString("d") + ".txt");
             return File.Exists(pathToFile);
         }
 

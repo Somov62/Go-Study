@@ -1,5 +1,4 @@
 ﻿using System.Data.Entity;
-using System.Linq;
 
 namespace DataBaseCore
 {
@@ -11,6 +10,12 @@ namespace DataBaseCore
         {
             if (_context == null) 
                 _context = new DbEntities();
+            return _context;
+        }
+
+        public static DbEntities UpdateContext()
+        {
+            _context = new DbEntities();
             return _context;
         }
     }

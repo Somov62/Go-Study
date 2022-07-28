@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using API_Project.Models.Log;
@@ -42,6 +43,25 @@ namespace API_Project.Controllers.ServerLogs
         }
 
         [HttpGet]
+        [Route("state")]
+        [ResponseType(typeof(ServerStateModel))]
+        public IHttpActionResult GetServerState(string accessToken)
+        {
+            if (!ValidateToken(accessToken)) return BadRequest("Incorrect token");
+
+            ServerStateModel response = new ServerStateModel()
+            {
+                DateStart = ServerState.State.DateStart,
+                CountRequests = ServerState.State.CountRequests,
+                CountSentEmails = EmailSender.EmailSender.ConutSentEmails,
+                CountTokens = DataBaseCore.DbEntities.GetContext().UserTokens.Count(),
+                CountTodayLogs = Logger.GetContext().CountTodayLogs - 1
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet]
         [Route("dates")]
         [ResponseType(typeof(List<LogModel>))]
         public IHttpActionResult GetAllDateLogs(string accessToken)
@@ -72,8 +92,8 @@ namespace API_Project.Controllers.ServerLogs
 
             foreach (var item in logs)
             {
-                response.Add(new LogModel() 
-                { 
+                response.Add(new LogModel()
+                {
                     FileName = item.FileName,
                     Content = item.Content
                 });
@@ -91,6 +111,19 @@ namespace API_Project.Controllers.ServerLogs
             _logger.Directory.ClearAll();
             return Ok();
         }
+
+        [HttpGet]
+        [Route("updateDbContext")]
+        [ResponseType(typeof(IHttpActionResult))]
+        public IHttpActionResult UpdateDbContext(string accessToken)
+        {
+            if (!ValidateToken(accessToken)) return BadRequest("Incorrect token");
+
+            DataBaseCore.DbEntities.UpdateContext();
+            return Ok();
+        }
+
+
 
         private bool ValidateToken(string accessToken)
         {

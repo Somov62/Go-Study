@@ -29,6 +29,7 @@ namespace API_Project.Controllers.Authorization
         [ResponseType(typeof(TokenModel))]
         public IHttpActionResult PostUser([FromBody] CredentialModel credentials)
         {
+            ServerState.State.CountRequests++;
             #region Validating
             if (string.IsNullOrEmpty(credentials.Login)) return BadRequest("Incorrect user data");
             if (string.IsNullOrEmpty(credentials.Password)) return BadRequest("Incorrect user data");
@@ -103,6 +104,7 @@ namespace API_Project.Controllers.Authorization
         [ResponseType(typeof(TokenModel))]
         public IHttpActionResult PostRefreshToken([FromBody] TokenModel tokenInfo)
         {
+            ServerState.State.CountRequests++;
             #region Validating
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -162,6 +164,7 @@ namespace API_Project.Controllers.Authorization
         [ResponseType(typeof(TokenModel))]
         public IHttpActionResult PostLogOut(string token)
         {
+            ServerState.State.CountRequests++;
             #region Validating
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var sessionInfo = _db.UserTokens.Where(p => p.Token == token).FirstOrDefault();
@@ -203,6 +206,7 @@ namespace API_Project.Controllers.Authorization
         [ApiExplorerSettings(IgnoreApi = true)]
         public IHttpActionResult BanLogOut(string id)
         {
+            ServerState.State.CountRequests++;
             #region Validating
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

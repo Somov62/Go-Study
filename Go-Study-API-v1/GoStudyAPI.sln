@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Credentilas", "Credentilas"
 		Credentilas\LogAccess.txt = Credentilas\LogAccess.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerState", "ServerState\ServerState.csproj", "{EC0BD269-794A-4DCF-97E9-5E68C0B76DE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{CFA567ED-B7CC-42FD-8D09-95EE3E969B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFA567ED-B7CC-42FD-8D09-95EE3E969B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFA567ED-B7CC-42FD-8D09-95EE3E969B7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC0BD269-794A-4DCF-97E9-5E68C0B76DE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC0BD269-794A-4DCF-97E9-5E68C0B76DE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC0BD269-794A-4DCF-97E9-5E68C0B76DE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC0BD269-794A-4DCF-97E9-5E68C0B76DE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

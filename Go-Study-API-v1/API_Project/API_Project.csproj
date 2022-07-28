@@ -165,6 +165,7 @@
     <Compile Include="Models\Authorization\CredentialModel.cs" />
     <Compile Include="Models\Authorization\TokenModel.cs" />
     <Compile Include="Models\Log\LogModel.cs" />
+    <Compile Include="Models\Log\ServerStateModel.cs" />
     <Compile Include="Models\Registration\EmailVerficationModel.cs" />
     <Compile Include="Models\Registration\RegModel.cs" />
     <Compile Include="Models\Registration\ResetPasswordModel.cs" />
@@ -287,6 +288,10 @@
     <ProjectReference Include="..\LoggerLib\LoggerLib.csproj">
       <Project>{cfa567ed-b7cc-42fd-8d09-95ee3e969b7b}</Project>
       <Name>LoggerLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServerState\ServerState.csproj">
+      <Project>{ec0bd269-794a-4dcf-97e9-5e68c0b76de2}</Project>
+      <Name>ServerState</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
